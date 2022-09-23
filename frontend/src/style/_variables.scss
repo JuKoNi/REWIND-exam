@@ -1,0 +1,17 @@
+$text-font: 'Roboto Condensed', sans-serif;
+
+@mixin buttons {
+    min-width: 10em;
+    max-width: 10em;
+    min-height: 3em;
+    max-height: 7em;
+    font-size: 1.2em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: none;
+    justify-content: space-evenly;
+    color: white;
+    padding: 1.1em 2.3em;
+    border-radius: 1000px;
+}

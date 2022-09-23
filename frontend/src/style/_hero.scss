@@ -1,0 +1,29 @@
+.hero {
+    padding: 2em;
+    margin: 0 auto;
+    min-width: 10em;
+    max-width: 45em;
+    min-height: 15em;
+    max-height: 30em;
+    background: rgba(255, 255, 255, 0.5);
+    font-family: 'Roboto Condensed', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: left;
+    border-radius: 0.5em;
+
+    .hero-text {
+        font-size: 2em;
+        font-weight: 400;
+    }
+
+    .hero-list {
+        padding: 0 1em;
+
+        li {
+            line-height: 1.6em;
+            font-size: 1.3em;
+        }
+    }
+}

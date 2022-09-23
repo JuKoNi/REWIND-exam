@@ -1,0 +1,21 @@
+main {
+    background-color: #569c7a;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.add-game-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.multiple-players {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
