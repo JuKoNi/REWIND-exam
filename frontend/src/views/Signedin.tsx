@@ -12,7 +12,7 @@ const Signedin = (props: Props) => {
     const [ showAddGame, setShowAddGame ] = useState<boolean>(false);
     const [ showAllGames, setShowAllGames ] = useState<boolean>(false);
     const [ showTenLatest, setShowTenLatest ] = useState<boolean>(false);
-    const [ sendGames, setSendGames ] = useState<GameInterface[]>([])
+    const [ gameState, setGameState ] = useState<GameInterface[]>([])
 
     let games:GameInterface[];
 
@@ -31,7 +31,7 @@ const Signedin = (props: Props) => {
         const response = await fetch('http://localhost:8080/allgames');
         const data = await response.json();
         games = data;
-        setSendGames(games);
+        setGameState(games);
         
 
         for (let i = 0; i < games.length; i++) {
@@ -57,7 +57,7 @@ const Signedin = (props: Props) => {
 
     // SORTERA LISTAN INNAN MAPPNINGEN
 
-    const allGames = sendGames.map((game, index)=> {
+    const allGames = gameState.slice().sort((a, b) => a.date - b.date).map((game, index)=> {
         return (
             <AllGames
             toggleShowAll={toggleShowAll}
@@ -68,16 +68,6 @@ const Signedin = (props: Props) => {
         )
     })
 
-    // function findWinner() {
-    //     for (const [name, value] of Object.entries(props.info)) {
-    //       if (name.includes('player') && value.result != '') {
-    //         console.log(value)
-    //         highScore = parseInt(value.result)
-    //       }
-    //     }
-    
-    //   }
-    
 
     let user = localStorage.getItem('user');
 

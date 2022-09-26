@@ -27,16 +27,20 @@ const AddGame = (props: Props) => {
 
 
     async function addGame(event:any) { 
+
+        function titleCase(str:string){
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
         event.preventDefault();
 
         const games:object = {
-            typeOfGame: typeOfGame,
+            typeOfGame: titleCase(typeOfGame),
             date: date,
             numberOfPlayers: numberOfPlayers,
-            playerOne: {name: playerOne, result: resultPlayerOne},
-            playerTwo: {name: playerTwo, result: resultPlayerTwo},
-            playerThree: {name: playerThree, result: resultPlayerThree},
-            playerFour: {name: playerFour, result: resultPlayerFour},
+            playerOne: {name: titleCase(playerOne), result: resultPlayerOne},
+            playerTwo: {name: titleCase(playerTwo), result: resultPlayerTwo},
+            playerThree: {name: titleCase(playerThree), result: resultPlayerThree},
+            playerFour: {name: titleCase(playerFour), result: resultPlayerFour},
 
         };
         const response = await fetch('http://localhost:8080/addgame', {

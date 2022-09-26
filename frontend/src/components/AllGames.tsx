@@ -72,6 +72,7 @@ const AllGames = (props: Props) => {
 
   }
 
+
   return (
     <section>
       <header>
