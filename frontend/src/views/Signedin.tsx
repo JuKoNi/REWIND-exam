@@ -59,12 +59,14 @@ const Signedin = (props: Props) => {
 
     const allGames = gameState.slice().sort((a, b) => a.date - b.date).map((game, index)=> {
         return (
+ 
             <AllGames
             toggleShowAll={toggleShowAll}
             key={index}
             games={game}
 
             />
+
         )
     })
 
@@ -83,9 +85,19 @@ const Signedin = (props: Props) => {
                     <button>Se mina 10 senaste matcher</button>
                 </nav>
             </header>
-
+            {showAllGames ? <section className='games-section'>
+                <h1>Detta är alla registrerade matcher</h1>
+                <header className='game-header'>
+                    <h4>Datum</h4>
+                    <h4>Typ av match</h4>
+                    <h4>Vinnare</h4>
+                    <h4>Förlorare</h4>
+                    <h4>Resultat</h4>
+                </header>
+                {allGames}
+            </section> : ''}
             {newGame}
-            {allGames}
+            
         </main>
     )
 }

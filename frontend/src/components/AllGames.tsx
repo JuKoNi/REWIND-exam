@@ -74,22 +74,16 @@ const AllGames = (props: Props) => {
 
 
   return (
-    <section>
-      <header>
-        <h4>Datum</h4>
-        <h4>Typ av match</h4>
-        <h4>Vinnare</h4>
-        <h4>Förlorare</h4>
-        <h4>Resultat</h4>
-      </header>
-      <ul>
+
+      <ul className='games-list'>
         <p>{props.games.date}</p>
         <p>{props.games.typeOfGame}</p>
         <p>{winner}</p>
         <p>{loser}</p>
         <p>{highScore} - {lowScore}</p>
+        <p>Redigera</p>
       </ul>
-    </section>
+
   )
 }
 
