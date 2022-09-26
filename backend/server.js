@@ -49,8 +49,7 @@ app.post('/login', async (request, response) => {
 
     const responseObject = {
         success: false,
-        user: '',
-        interests: []
+        user: ''
     }
     console.log(credentials);
     // kollar mot accounts.db om användare med namnet finns
@@ -80,6 +79,18 @@ app.post('/addgame', async (request, response) => {
 
     gamesDB.insert(gameInfo);
     response.json(responseObject);
+});
+
+// hämta ALLA matcher
+app.get('/allgames', async (request, response) => {
+    const allGames = await gamesDB.find({ });
+    if ( allGames.length > 0) {
+        response.send(allGames)
+    }
+    console.log(allGames);
+    console.log('hämtar alla matcher');
+
+    
 })
 
 

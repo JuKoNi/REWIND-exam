@@ -2,7 +2,7 @@ import { useState, useEffect, ChangeEvent } from 'react';
 
 
 type Props = {
-    toggleAddgame: () => void
+    toggleAddGame: () => void
 }
 
 const AddGame = (props: Props) => {
@@ -32,6 +32,7 @@ const AddGame = (props: Props) => {
         const games:object = {
             typeOfGame: typeOfGame,
             date: date,
+            numberOfPlayers: numberOfPlayers,
             playerOne: {name: playerOne, result: resultPlayerOne},
             playerTwo: {name: playerTwo, result: resultPlayerTwo},
             playerThree: {name: playerThree, result: resultPlayerThree},
