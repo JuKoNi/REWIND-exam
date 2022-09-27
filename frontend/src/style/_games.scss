@@ -1,3 +1,11 @@
+.game-header {
+    padding-inline-start: 40px;
+    max-width: 85vw;
+    min-width: 85vw;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    padding-bottom: .6em;
+}
 .games-section {
     max-width: 85vw;
     min-width: 85vw;
@@ -12,13 +20,13 @@
         grid-template-columns: repeat(6, 1fr);
         line-height: 3em;
         border-top: 2px solid black;
+
+        .edit {
+            text-transform: uppercase;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: .8em;
+        }
     }
-}
-.game-header {
-    padding-inline-start: 40px;
-    max-width: 85vw;
-    min-width: 85vw;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    padding-bottom: .6em;
 }

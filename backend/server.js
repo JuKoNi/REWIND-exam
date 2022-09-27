@@ -93,6 +93,28 @@ app.get('/allgames', async (request, response) => {
     
 })
 
+// hämta användarens matcher
+app.get('/usergames/:user', async (request, response) => {
+
+    console.log(request.params.user);
+    let user = request.params.user;
+
+    const myGames = await gamesDB.find({ $or: [{ "playerOne.name": user }, { "playerTwo.name": user }, { "playerThree.name": user }, { "playerFour.name": user }] })
+    if ( myGames.length > 0 ) {
+        response.send(myGames)
+    }
+})
+
+// hämta EN användares matcher
+app.get('/usergames/:user', async (request, response) => {
+    console.log(request.params.user)
+
+    const friendsGames = await gamesDB.find({ $or: [{ "playerOne.name": user }, { "playerTwo.name": user }, { "playerThree.name": user }, { "playerFour.name": user }] })
+    if ( friendsGames.length > 0 ) {
+        response.send(friendsGames)
+    }
+})
+
 
 // starta servern
 app.listen(8080, () => {

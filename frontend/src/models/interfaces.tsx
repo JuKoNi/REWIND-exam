@@ -1,6 +1,6 @@
 export interface GameInterface {
     typeOfGame: string,
-    date: number,
+    date: string,
     numberOfPlayers: string,
     playerOne: {
         name: string,

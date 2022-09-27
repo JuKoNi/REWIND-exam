@@ -6,8 +6,8 @@ type Props = {
 }
 
 const SignupForm = (props: Props) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
 
     const navigate = useNavigate();
 
@@ -18,8 +18,12 @@ const SignupForm = (props: Props) => {
 
     async function signup() {
 
+      function titleCase(str:string){
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      }
+
         const account:object = {
-          username: username,
+          username: titleCase(username),
           password: password
         };
 
@@ -31,7 +35,7 @@ const SignupForm = (props: Props) => {
         const data = await response.json();
         console.log(data);
         if (data.success) {
-          localStorage.setItem('user', username);
+          localStorage.setItem('user', titleCase(username));
           navigate('/signedin');
         }
       };

@@ -121,7 +121,9 @@ const AddGame = (props: Props) => {
             </div>
         ) : ('')}
 
-        <input onClick={addGame} type="submit" value="Lägg till match" />
+
+        <input className='btn' onClick={addGame} type="submit" value="Lägg till match" />
+
 
 
 

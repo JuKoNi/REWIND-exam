@@ -1,14 +1,47 @@
 main {
     background-color: #569c7a;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    .search {
+        margin-top: 2em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1em;
+
+        .btn {
+            background-color: rgb(61, 61, 61);
+        }
+    }
+
+    .welcome-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1em;
+
+        .btn-section {
+            display: flex;
+            gap: 1em;
+
+        }
+
+    }
     
+}
+.btn {
+    @include buttons;
+    background-color: black;
+    font-size: .8em;
+    padding: .5em 1em;
 }
 
 .add-game-form {
+    margin-top: 2em;
     display: flex;
     flex-direction: column;
     align-items: center;

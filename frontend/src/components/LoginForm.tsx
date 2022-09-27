@@ -17,8 +17,12 @@ const LoginForm = (props: Props) => {
 
     async function login() {
 
+      function titleCase(str:string){
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      }
+
         const account:object = {
-          username: loginUsername,
+          username: titleCase(loginUsername),
           password: loginPassword
         };
         
@@ -30,8 +34,7 @@ const LoginForm = (props: Props) => {
         const data = await response.json();
         console.log(data);
         if (data.success) {
-          localStorage.setItem('user', data.user);
-          localStorage.setItem('interests', JSON.stringify(data.interests));
+          localStorage.setItem('user', titleCase(data.user));
           navigate('/signedin');
         }
       };
