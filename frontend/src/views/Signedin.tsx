@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import AllGames from '../components/AllGames'
 import MyGames from '../components/MyGames';
 import FriendGames from '../components/FriendGames';
+import SpecificGame from '../components/SpecificGame';
 import { GameInterface } from '../models/interfaces'
 
 type Props = {
@@ -17,11 +18,13 @@ const Signedin = (props: Props) => {
     const [ showFilterGame, setShowFilterGame ] = useState<boolean>(false);
     const [ showFilterName, setShowFilterName ] = useState<boolean>(false);
 
-    const [ myGameState, setMyGameState ] = useState<GameInterface[]>([]);
     const [ gameState, setGameState ] = useState<GameInterface[]>([]);
+    const [ myGameState, setMyGameState ] = useState<GameInterface[]>([]);
     const [ friendGameState, setFriendGameState ] = useState<GameInterface[]>([]);
+    const [ specificGameState, setSpecificGameState ] = useState<GameInterface[]>([]);
 
-    const [ nameToFind, setNameToFind ] = useState<string>('')
+    const [ nameToFind, setNameToFind ] = useState<string>('');
+    const [ gameToFind, setGameToFind ] = useState<string>('');
 
     let games:GameInterface[];
     let user = localStorage.getItem('user');
@@ -44,6 +47,7 @@ const Signedin = (props: Props) => {
     function toggleFilterName() {
         setShowFilterName(!showFilterName)
     }
+
 
     // API calls
     async function getAllGames() {
@@ -90,7 +94,28 @@ const Signedin = (props: Props) => {
         console.log('i getFRIENDgames')
         
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < games.length; i++) {
+            const element = games[i];
+            console.log(element);
+            
+        }
+    };
+
+    async function getSpecificGame() {
+        function titleCase(str:string){
+            return str.charAt(0).toUpperCase() + str.slice(1);
+          }
+
+        let url = "http://localhost:8080/games/" + (titleCase(gameToFind));
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log(data)
+        games = data;
+        setSpecificGameState(games);
+        console.log('i getSPECIFICgame')
+        
+
+        for (let i = 0; i < games.length; i++) {
             const element = games[i];
             console.log(element);
             
@@ -145,6 +170,15 @@ const Signedin = (props: Props) => {
             toggleFilterName={toggleFilterName}
             key={index}
             games={game}/>
+        )
+    });
+
+    const specificGame = specificGameState.map((game, index) => {
+        return (
+            <SpecificGame
+            toggleFilterGame={toggleFilterGame}
+            key={index}
+            games={game} />
         )
     })
 
@@ -201,6 +235,19 @@ const Signedin = (props: Props) => {
                     <h4>Resultat</h4>
                 </header>
                 {friendGames}
+            </section> : ''}
+
+            {showFilterGame ? <section className='games-section search'>
+                <input onChange={(e) => setGameToFind(e.target.value)} type="text" name="" id="" placeholder='Ange typ av match, t.ex tennis'/>
+                <button className='btn' onClick={getSpecificGame}>Sök</button>
+                <header className='game-header'>
+                    <h4>Datum</h4>
+                    <h4>Typ av match</h4>
+                    <h4>Vinnare</h4>
+                    <h4>Förlorare</h4>
+                    <h4>Resultat</h4>
+                </header>
+                {specificGame}
             </section> : ''}
 
             {newGame}

@@ -115,6 +115,16 @@ app.get('/usergames/:user', async (request, response) => {
     }
 })
 
+// hämta ALLA matcher av ett slag
+app.get('/games/:game', async (request, response) => {
+    console.log(request.params.game)
+
+    const specificGame = await gamesDB.find({ "typeOfGame": request.params.game})
+    if ( specificGame.length > 0 ) {
+        response.send(specificGame)
+    }
+})
+
 
 // starta servern
 app.listen(8080, () => {
