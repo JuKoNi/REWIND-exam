@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent, useEffect } from 'react'
 import { GameInterface } from '../models/interfaces'
 
 type Props = {
@@ -21,10 +21,14 @@ const EditGame = (props: Props) => {
 
     type FormType = ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement> ;
 
+    useEffect(() => {
+        setNumberOfPlayers(props.games.numberOfPlayers)
+    }, [])
+    
+
     const handleNumber = (e:FormType) => {
         setNumberOfPlayers(props.games.numberOfPlayers);
     };
-
 
     async function addGame(event:any) { 
 
