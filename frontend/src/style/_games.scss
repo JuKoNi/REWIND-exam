@@ -16,6 +16,7 @@
     }
 
     .games-list {
+
         max-width: 85vw;
         min-width: 95vw;
         display: grid;
@@ -24,12 +25,29 @@
         border-top: 2px solid black;
 
         .edit {
+            position: relative;
             text-transform: uppercase;
             text-decoration: underline;
             cursor: pointer;
             font-weight: 600;
             font-size: .8em;
         }
+
+    }
+}
+.edit-game-form {
+    background-color: white;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 2em 0;
+    align-items: center;
+    justify-content: space-evenly;
+
+    & > div {
+        display: flex;
+        flex-direction: column;
+        gap: .5em;
     }
 }
 

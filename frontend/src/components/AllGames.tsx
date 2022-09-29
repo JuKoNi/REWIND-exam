@@ -1,5 +1,6 @@
 import { useState} from 'react';
-import { GameInterface } from '../models/interfaces'
+import { GameInterface } from '../models/interfaces';
+import EditGame from './EditGame'
 
 
 
@@ -19,18 +20,26 @@ const AllGames = (props: Props) => {
     console.log(props.games.date);
     setEditGame(!editGame)
   }
-
+  const editOneGame = editGame ? (
+    <EditGame 
+    toggleEditGame={toggleEditGame}
+    games={props.games} />)
+    : ( '' );
 
   return (
+      <div>
+        {editOneGame}
+        <ul className='games-list'>
+          <p>{props.games.date}</p>
+          <p>{props.games.typeOfGame}</p>
+          <p>{props.games.winner}</p>
+          <p>{props.games.loser}</p>
+          <p>{props.games.highScore} - {props.games.lowScore}</p>
+          <p onClick={toggleEditGame} className='edit'>Redigera</p>
+        </ul>
 
-      <ul className='games-list'>
-        <p>{props.games.date}</p>
-        <p>{props.games.typeOfGame}</p>
-        <p>{props.games.winner}</p>
-        <p>{props.games.loser}</p>
-        <p>{props.games.highScore} - {props.games.lowScore}</p>
-        <p onClick={toggleEditGame} className='edit'>Redigera</p>
-      </ul>
+      </div>
+
 
   )
 }
