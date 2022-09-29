@@ -9,8 +9,8 @@ import LoginForm from './components/LoginForm';
 
 
 function App() {
-  const [ showLogin, setShowLogin ] = useState(false);
-  const [ showSignup, setShowSignup ] = useState(false);
+  const [ showLogin, setShowLogin ] = useState<boolean>(false);
+  const [ showSignup, setShowSignup ] = useState<boolean>(false);
 
   const toggleLogin = () => {
     setShowLogin(showLogin => !showLogin)
@@ -18,10 +18,11 @@ function App() {
   const toggleSignup = () => {
     setShowSignup(showSignup => !showSignup)
   };
+  
 
   const clickedLoggedin = showLogin ? (
     <LoginForm 
-      toggleLogin={toggleLogin}/>)
+      toggleLogin={toggleLogin} />)
       : ('');
   
   const clickedSignedup = showSignup ? (
@@ -46,8 +47,6 @@ function App() {
 
       {clickedLoggedin}
       {clickedSignedup}
-
-
 
 
     </div>

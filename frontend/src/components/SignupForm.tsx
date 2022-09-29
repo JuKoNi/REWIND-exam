@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
-    toggleSignup: () => void
+    toggleSignup: () => void,
+
 }
 
 const SignupForm = (props: Props) => {
@@ -11,16 +12,12 @@ const SignupForm = (props: Props) => {
 
     const navigate = useNavigate();
 
-    // function closeSignupForm() {
-    //     document.getElementById("signupForm").style.display = "none";
-    //   }
-    
+    function titleCase(str:string){
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
 
     async function signup() {
-
-      function titleCase(str:string){
-        return str.charAt(0).toUpperCase() + str.slice(1);
-      }
 
         const account:object = {
           username: titleCase(username),
@@ -34,10 +31,15 @@ const SignupForm = (props: Props) => {
         });
         const data = await response.json();
         console.log(data);
-        if (data.success) {
+        if (data.success && username != '' && password != '') {
           localStorage.setItem('user', titleCase(username));
+
           navigate('/signedin');
         }
+        if (!data.success) {
+          alert('Fel, fel, feeel! Försök igen.')
+        }
+
       };
     
   return (
@@ -46,11 +48,11 @@ const SignupForm = (props: Props) => {
         <h1 onClick={props.toggleSignup} className='close'>X</h1>
         <div>
         <label htmlFor="username">Användarnamn</label>
-        <input onChange={(e) => setUsername(e.target.value)} id='username' type="text" placeholder='Ange användarnamn' />
+        <input onChange={(e) => setUsername(e.target.value)} id='username' type="text" placeholder='Ange användarnamn' required/>
         </div>
         <div>
         <label htmlFor="password">Lösenord</label>
-        <input onChange={(e) => setPassword(e.target.value)} type="password" id="password" placeholder='Ange lösenord' />
+        <input onChange={(e) => setPassword(e.target.value)} type="password" id="password" placeholder='Ange lösenord' required />
         </div>
         <button onClick={signup} className="btn signup">SIGN ME UP</button>
   </section>

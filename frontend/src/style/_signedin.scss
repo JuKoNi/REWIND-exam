@@ -1,21 +1,19 @@
 main {
-    background-color: #569c7a;
+    // background-color: #569c7a;
+    background-image: url('../assets/background.jpg');
+    background-size: cover;
     width: 100vw;
-    min-height: 100vh;
+    height: 50vh;
     display: flex;
     flex-direction: column;
     align-items: center;
 
     .search {
-        margin-top: 2em;
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 1em;
 
-        .btn {
-            background-color: rgb(61, 61, 61);
-        }
     }
 
     .welcome-section {
@@ -23,9 +21,12 @@ main {
         flex-direction: column;
         align-items: center;
         gap: 1em;
+        color: white;
 
         .btn-section {
             display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 1em;
 
         }
@@ -35,21 +36,50 @@ main {
 }
 .btn {
     @include buttons;
-    background-color: black;
     font-size: .8em;
     padding: .5em 1em;
+
+    &:hover {
+        background-color: rgb(53, 113, 75);
+        transform: scale(1.1);
+    }
+}
+.logout {
+    margin-top: 1em;
+    background-color: black;
 }
 
 .add-game-form {
-    margin-top: 2em;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    // flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
+
+    & > div {
+        display: flex;
+        flex-direction: column;
+        gap: .5em;
+    }
 }
 
 .multiple-players {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+@media only screen and (max-width: 496px) {
+    main {
+
+        .welcome-section { 
+            color: white;
+
+            .welcome-text {
+                font-weight: 600;
+                color: black;
+            }
+        }
+    }
 }

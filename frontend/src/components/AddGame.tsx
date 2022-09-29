@@ -31,7 +31,7 @@ const AddGame = (props: Props) => {
         function titleCase(str:string){
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
-        event.preventDefault();
+        // event.preventDefault();
 
         const games:object = {
             typeOfGame: titleCase(typeOfGame),
@@ -53,76 +53,101 @@ const AddGame = (props: Props) => {
         
     }
   return (
-    <form action="" className='add-game-form'>
-        <label htmlFor="date">Datum:</label>
-        <input  onChange={(e) => setDate(e.target.value)} type="date" name="date" id="date" />
+    <form action="" className='add-game-form popup'>
+        <div className='date'>
+            <label htmlFor="date">Datum:</label>
+            <input  onChange={(e) => setDate(e.target.value)} type="date" name="date" id="date" required/>
+        </div>
 
-        <label htmlFor="typeOfGame">Typ av match:</label>
-        <input  onChange={(e) => setTypeOfGame(e.target.value)} type="text" name="typeOfGame" id="typeOfGame" />
+        <div className='type'>
+            <label htmlFor="typeOfGame">Typ av match:</label>
+            <input  onChange={(e) => setTypeOfGame(e.target.value)} type="text" name="typeOfGame" id="typeOfGame" required/>
+        </div>
 
-        <label htmlFor="numberOfPlayers">Antal spelare:</label>
-        <select name="numberOfPlayers" value={numberOfPlayers} onChange={handleNumber} id="numberOfPlayers">
-        
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-        </select>
+        <div className='numberOf'>
+            <label htmlFor="numberOfPlayers">Antal spelare:</label>
+            <select name="numberOfPlayers" value={numberOfPlayers} onChange={handleNumber} id="numberOfPlayers" required>
+            
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        </div>
         { numberOfPlayers === "1" ? (
             <div>
 
-                <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" placeholder='Användarnamn' />
-                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat' />
+                <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" placeholder='Användarnamn' required/>
+                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat' required/>
                 
             </div>
 
         ) : ('')}
         { numberOfPlayers === "2" ? (
             <div className='multiple-players'>
+                <div>
+                    <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 1' required/>
+                    <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 1' required/>
+                </div>
 
-                <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 1' />
-                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 1' />
-
-                <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 2' />
-                <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 2' />
+                <div>
+                    <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 2' required/>
+                    <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 2' required/>
+                </div>
                 
             </div>
 
         ) : ('')}
         { numberOfPlayers === "3" ? (
-                <div className='multiple-players'>
+            <div className='multiple-players'>
 
-                <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 1' />
-                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 1' />
-        
-                <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 2' />
-                <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 2' />
-        
-                <input onChange={(e) => setPlayerThree(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 3' />
-                <input onChange={(e) => setResultPlayerThree(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 3' />
+                <div>
+                    <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 1' required/>
+                    <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 1' required/>
+                </div>
+
+                <div>
+                    <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 2' required/>
+                    <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 2' required/>
+                </div>
+
+                <div>
+                    <input onChange={(e) => setPlayerThree(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 3' required/>
+                    <input onChange={(e) => setResultPlayerThree(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 3' required/>
+                </div>
                 
             </div>
         ) : ('')}
          { numberOfPlayers === "4" ? (
-                <div className='multiple-players'>
+            <div className='multiple-players'>
 
-                <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 1' />
-                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 1' />
-        
-                <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 2' />
-                <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 2' />
-        
-                <input onChange={(e) => setPlayerThree(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 3' />
-                <input onChange={(e) => setResultPlayerThree(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 3' />
+                <div>
+                    <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 1' required/>
+                    <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 1' required/>
+                </div>
 
-                <input onChange={(e) => setPlayerFour(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 4' />
-                <input onChange={(e) => setResultPlayerFour(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 4' />
+                <div>
+                    <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 2' required/>
+                    <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 2' required/>
+                </div>
+
+                <div>
+                    <input onChange={(e) => setPlayerThree(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 3' required/>
+                    <input onChange={(e) => setResultPlayerThree(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 3' required/>
+                </div>
+
+                <div>
+                    <input onChange={(e) => setPlayerFour(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 4' required/>
+                    <input onChange={(e) => setResultPlayerFour(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 4' required/>
+                </div>
                 
             </div>
         ) : ('')}
 
-
-        <input className='btn' onClick={addGame} type="submit" value="Lägg till match" />
+        <div>    
+            <input className='btn' onClick={addGame} type="submit" value="Lägg till match" />
+            <button className='btn abort' onClick={props.toggleAddGame}>Avbryt</button>
+        </div> 
 
 
 

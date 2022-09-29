@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 type Props = {
     toggleLogin: () => void,
+
 }
 
 const LoginForm = (props: Props) => {
@@ -11,16 +12,11 @@ const LoginForm = (props: Props) => {
 
     const navigate = useNavigate();
 
-    // function closeLoginForm() {
-    //     document.getElementById("loginForm").style.display = "none";
-    //   };
+    function titleCase(str:string){
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
 
     async function login() {
-
-      function titleCase(str:string){
-        return str.charAt(0).toUpperCase() + str.slice(1);
-      }
-
         const account:object = {
           username: titleCase(loginUsername),
           password: loginPassword
@@ -37,6 +33,10 @@ const LoginForm = (props: Props) => {
           localStorage.setItem('user', titleCase(data.user));
           navigate('/signedin');
         }
+        if (!data.success) {
+          alert('Fel, fel, feeel! Försök igen.')
+        }
+
       };
 
   return (
@@ -46,11 +46,11 @@ const LoginForm = (props: Props) => {
     <h1 onClick={props.toggleLogin} className='close'>X</h1>
     <div>
       <label htmlFor="login-username">Användarnamn</label>
-      <input onChange={(e) => setLoginUsername(e.target.value)} id='login-username' type="text" placeholder='Ange användarnamn' />
+      <input onChange={(e) => setLoginUsername(e.target.value)} id='login-username' type="text" placeholder='Ange användarnamn' required/>
     </div>
     <div>
       <label htmlFor="login-password">Lösenord</label>
-      <input onChange={(e) => setLoginPassword(e.target.value)} type="password" id="login-password" placeholder='Ange lösenord' />
+      <input onChange={(e) => setLoginPassword(e.target.value)} type="password" id="login-password" placeholder='Ange lösenord' required/>
     </div>
     <button onClick={login} className="btn login">LOG IN</button>
   </section>

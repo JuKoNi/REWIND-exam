@@ -1,22 +1,26 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AddGame from '../components/AddGame';
 import Header from '../components/Header';
 import AllGames from '../components/AllGames'
 import MyGames from '../components/MyGames';
 import FriendGames from '../components/FriendGames';
 import SpecificGame from '../components/SpecificGame';
-import { GameInterface } from '../models/interfaces'
+import { GameInterface } from '../models/interfaces';
+
 
 type Props = {
     
 }
 
 const Signedin = (props: Props) => {
+    
     const [ showAddGame, setShowAddGame ] = useState<boolean>(false);
     const [ showAllGames, setShowAllGames ] = useState<boolean>(false);
     const [ showTenLatest, setShowTenLatest ] = useState<boolean>(false);
     const [ showFilterGame, setShowFilterGame ] = useState<boolean>(false);
     const [ showFilterName, setShowFilterName ] = useState<boolean>(false);
+    const [ showNoWinner, setShowNoWinner ] = useState<boolean>(false);
 
     const [ gameState, setGameState ] = useState<GameInterface[]>([]);
     const [ myGameState, setMyGameState ] = useState<GameInterface[]>([]);
@@ -25,28 +29,133 @@ const Signedin = (props: Props) => {
 
     const [ nameToFind, setNameToFind ] = useState<string>('');
     const [ gameToFind, setGameToFind ] = useState<string>('');
+    const [ wins, setWins ] = useState<number>(0);
+    const [ attendedGames, setAttendedGames ] = useState<number>(0);
 
     let games:GameInterface[];
     let user = localStorage.getItem('user');
 
+    const navigate = useNavigate();
+
+    function logOut() {
+        localStorage.setItem("user", '');
+        navigate('/')
+      }
+
+    function titleCase(str:string){
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    };
+
+    function sortList(list: GameInterface[]) {
+        list.sort((a, b) => {
+            if(a.date > b.date) {
+                return -1;
+            } else if (a.date < b.date) {
+                return  1;
+            }
+            return 0;
+        })
+
+        return list;
+    };
+
+
+
+    function findWinner(popGames:GameInterface[]) {
+        for (let game of popGames) {
+
+        if (game.numberOfPlayers === "1") {
+          game.loser = "(ingen)";
+          game.lowScore = 0
+        }
+
+        for (const [name, value] of Object.entries(game)) {
+          if ( game.numberOfPlayers === "2" && game.playerOne.result === game.playerTwo.result) {
+            game.loser = "(ingen)"
+          }
+    
+          if (name.includes('player') && value.result != '') {
+            if (!game.highScore) {
+                game.highScore = 0;
+            }
+            if (!game.lowScore) {
+                game.lowScore = 10000;
+            }
+            
+            if (parseInt(value.result) > game.highScore) {
+              game.highScore = parseInt(value.result);
+              game.winner = (value.name);
+            } else if (parseInt(value.result) == game.highScore) {
+              game.winner = game.winner ? game.winner +' ' +'&'+ ' ' + value.name : value.name;
+            }
+            if (parseInt(value.result) < game.lowScore) {
+              game.lowScore = parseInt(value.result);
+              game.loser = value.name;
+            } else if (parseInt(value.result) == game.lowScore) {
+              game.loser = game.loser ? game.loser +' ' +'&'+ ' ' + value.name : value.name;
+            }
+          }
+        }
+      }
+      return popGames;
+    };
+
+
     // Toggles
     function toggleAddGame() {
-        setShowAddGame(!showAddGame)
-    }
+        setShowAddGame(!showAddGame);
+        setShowAllGames(false);
+        setShowTenLatest(false);
+        setShowFilterGame(false);
+        setShowFilterName(false);
+    };
     function toggleShowAll() {
         setShowAllGames(!showAllGames);
+        setShowAddGame(false);
+        setShowTenLatest(false);
+        setShowFilterGame(false);
+        setShowFilterName(false);
+
         getAllGames()
-    }
+
+    };
     function toggleShowTen() {
-        setShowTenLatest(!showTenLatest)
+        setShowTenLatest(!showTenLatest);
+        setShowAddGame(false);
+        setShowAllGames(false);
+        setShowFilterGame(false);
+        setShowFilterName(false);
+
+        if(showTenLatest === false) {
+            setWins(0)
+        }
+
         getMyGames()
     };
     function toggleFilterGame() {
-        setShowFilterGame(!showFilterGame)
+        setShowFilterGame(!showFilterGame);
+        setShowAddGame(false);
+        setShowAllGames(false);
+        setShowTenLatest(false);
+        setShowFilterName(false);
     };
     function toggleFilterName() {
-        setShowFilterName(!showFilterName)
+        setShowFilterName(!showFilterName);
+        setShowAddGame(false);
+        setShowAllGames(false);
+        setShowTenLatest(false);
+        setShowFilterGame(false);
+    };
+    function toggleNoWinner() {
+        setShowNoWinner(!showNoWinner);
+        setShowAddGame(false);
+        setShowAllGames(false);
+        setShowTenLatest(false);
+        setShowFilterGame(false);
+        setShowFilterName(false);
+
     }
+
 
 
     // API calls
@@ -54,72 +163,53 @@ const Signedin = (props: Props) => {
         const response = await fetch('http://localhost:8080/allgames');
         const data = await response.json();
         games = data;
-        setGameState(games);
-        
 
-        for (let i = 0; i < games.length; i++) {
-            const element = games[i];
-            console.log(element);
-            
-        }
+        games = findWinner(games);
+        setGameState(games);
     };
 
     async function getMyGames() {
         let url = "http://localhost:8080/usergames/" + user;
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data)
-        games = data;
-        setMyGameState(games);
-        console.log('i getmygames')
-        
 
-        for (let i = 0; i < 10; i++) {
-            const element = games[i];
-            console.log(element);
-            
+        games = data;
+        setAttendedGames(attendedGames => (attendedGames = games.length > 10 ? 10 : games.length));
+        
+        games = findWinner(games);
+
+        
+        for (let obj of games) {
+  
+            if(obj.winner.includes(user!)) {
+                setWins(wins => (wins +1));
+                console.log(obj.loser)     
+            } 
         }
+        
+        setMyGameState(games);
+
     };
     async function getFriendsGames() {
-        function titleCase(str:string){
-            return str.charAt(0).toUpperCase() + str.slice(1);
-          }
-
         let url = "http://localhost:8080/usergames/" + (titleCase(nameToFind));
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data)
-        games = data;
-        setFriendGameState(games);
-        console.log('i getFRIENDgames')
-        
 
-        for (let i = 0; i < games.length; i++) {
-            const element = games[i];
-            console.log(element);
-            
-        }
+        games = data;
+
+        games = findWinner(games);
+        setFriendGameState(games);
     };
 
     async function getSpecificGame() {
-        function titleCase(str:string){
-            return str.charAt(0).toUpperCase() + str.slice(1);
-          }
-
         let url = "http://localhost:8080/games/" + (titleCase(gameToFind));
         const response = await fetch(url);
         const data = await response.json();
         console.log(data)
         games = data;
-        setSpecificGameState(games);
-        console.log('i getSPECIFICgame')
         
-
-        for (let i = 0; i < games.length; i++) {
-            const element = games[i];
-            console.log(element);
-            
-        }
+        games = findWinner(games);
+        setSpecificGameState(games);
     };
 
 
@@ -132,15 +222,8 @@ const Signedin = (props: Props) => {
     : ( '' );
     
 
-    // SORTERA LISTAN INNAN MAPPNINGEN
-    let sortedGames = gameState.sort((a, b) => {
-        if(a.date > b.date) {
-            return -1;
-        } else if (a.date < b.date) {
-            return  1;
-        }
-        return 0;
-    });
+
+    let sortedGames = sortList([...gameState]);
 
     const allGames = sortedGames.map((game, index)=> {
         return (
@@ -155,36 +238,52 @@ const Signedin = (props: Props) => {
         )
     });
 
-    const myGames = myGameState.map((game, index) => {
+    
+    let mySortedGames = sortList([...myGameState]);
+
+    mySortedGames.length = mySortedGames.length > 10 ? 10 : mySortedGames.length;
+
+    const myGames = mySortedGames.map((game, index) => {
         return (
+
             <MyGames 
             toggleShowTen={toggleShowTen}
             key={index}
-            games={game}/>
+            games={game}
+            user={user}
+            />
         )
     });
 
-    const friendGames = friendGameState.map((game, index) => {
+    let friendSortedGames = sortList([...friendGameState])
+
+    const friendGames = friendSortedGames.map((game, index) => {
         return (
+
             <FriendGames 
             toggleFilterName={toggleFilterName}
             key={index}
-            games={game}/>
+            games={game}
+            />
         )
     });
 
-    const specificGame = specificGameState.map((game, index) => {
+    let specificSortedGames = sortList([...specificGameState])
+
+    const specificGame = specificSortedGames.map((game, index) => {
         return (
+
             <SpecificGame
             toggleFilterGame={toggleFilterGame}
             key={index}
-            games={game} />
+            games={game}
+            />
         )
     })
 
-
     return (
         <main>
+            <button onClick={logOut} className='logout btn'>Logga ut</button>
             <Header />
             
             <header className='welcome-section'>
@@ -193,13 +292,13 @@ const Signedin = (props: Props) => {
                 <nav className='btn-section'>
                     <button onClick={toggleAddGame} className='btn'>Lägg till ny match</button>
                     <button onClick={toggleShowAll} className='btn'>Se alla matcher</button>
-                    <button onClick={toggleShowTen} className='btn'>Se mina 10 senaste matcher</button>
+                    <button onClick={toggleShowTen} className='btn'>Se mina senaste matcher</button>
                     <button onClick={toggleFilterGame} className='btn'>Filtrera på typ av match</button>
                     <button onClick={toggleFilterName} className='btn'>Filtrera på användarnamn</button>
                 </nav>
             </header>
 
-            {showAllGames ? <section className='games-section'>
+            {showAllGames ? <section className='games-section popup'>
                 <h1>Alla registrerade matcher:</h1>
                 <header className='game-header'>
                     <h4>Datum</h4>
@@ -211,8 +310,8 @@ const Signedin = (props: Props) => {
                 {allGames}
             </section> : ''}
 
-            {showTenLatest ? <section className='games-section'>
-                <h1>Alla registrerade matcher {user} deltagit i:</h1>
+            {showTenLatest ? <section className='games-section popup'>
+                <h1>{user} har vunnit {wins} av {attendedGames} matcher.</h1>
                 <header className='game-header'>
                     <h4>Datum</h4>
                     <h4>Typ av match</h4>
@@ -223,10 +322,9 @@ const Signedin = (props: Props) => {
                 {myGames}
             </section> : ''}
 
-            {showFilterName ? <section className='games-section search'>
+            {showFilterName ? <section className='games-section search popup'>
                 <input onChange={(e) => setNameToFind(e.target.value)} type="text" name="" id="" placeholder='Ange användarnamn'/>
-                <button className='btn' onClick={getFriendsGames}>Sök</button>
-                <h1>Alla registrerade matcher {nameToFind} deltagit i:</h1>
+                <button className='btn' onClick={getFriendsGames}>Se alla matcher {titleCase(nameToFind)} deltagit i</button>
                 <header className='game-header'>
                     <h4>Datum</h4>
                     <h4>Typ av match</h4>
@@ -237,8 +335,8 @@ const Signedin = (props: Props) => {
                 {friendGames}
             </section> : ''}
 
-            {showFilterGame ? <section className='games-section search'>
-                <input onChange={(e) => setGameToFind(e.target.value)} type="text" name="" id="" placeholder='Ange typ av match, t.ex tennis'/>
+            {showFilterGame ? <section className='games-section search popup'>
+                <input onChange={(e) => setGameToFind(e.target.value)} type="text" name="" id="" placeholder='T.ex tennis, yatzy etc'/>
                 <button className='btn' onClick={getSpecificGame}>Sök</button>
                 <header className='game-header'>
                     <h4>Datum</h4>
@@ -251,6 +349,7 @@ const Signedin = (props: Props) => {
             </section> : ''}
 
             {newGame}
+
             
         </main>
     )
