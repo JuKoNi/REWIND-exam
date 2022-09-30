@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../models/constant'
 
 type Props = {
     toggleSignup: () => void,
@@ -24,7 +25,8 @@ const SignupForm = (props: Props) => {
           password: password
         };
 
-        const response = await fetch('http://localhost:8080/signup', {
+        let endpoint = '/signup'
+        const response = await fetch(API_URL + endpoint, {
           method: 'POST',
           body: JSON.stringify(account),
           headers: {'Content-Type': 'application/json'}
