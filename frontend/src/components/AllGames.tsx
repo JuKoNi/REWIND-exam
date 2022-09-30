@@ -1,30 +1,36 @@
 import { useState} from 'react';
 import { GameInterface } from '../models/interfaces';
 import EditGame from './EditGame'
+import MyGames from './MyGames';
+
 
 
 
 type Props = {
     toggleShowAll: () => void,
+    toggleEditGame: () => void
     games:GameInterface,
     key:number
+    getAllGames:any
 
 }
 
 
 const AllGames = (props: Props) => {
-  const [ editGame, setEditGame ] = useState<boolean>(false);
+  const [ gameToEdit, setGameToEdit ] = useState<string>('');
 
 
-  function toggleEditGame() {
-    console.log(props.games.date);
-    setEditGame(!editGame)
-  }
-  const editOneGame = editGame ? (
+  let haxxor = false;
+  haxxor = gameToEdit ? true : false;
+  const editOneGame = haxxor && props.games._id === gameToEdit ? (
     <EditGame 
-    toggleEditGame={toggleEditGame}
-    games={props.games} />)
-    : ( '' );
+    toggleEditGame={props.toggleEditGame}
+    games={props.games}
+    getAllGames={props.getAllGames}
+    setGameToEdit={setGameToEdit} />)
+    : ( ' ' );
+
+
 
   return (
       <div>
@@ -35,7 +41,7 @@ const AllGames = (props: Props) => {
           <p>{props.games.winner}</p>
           <p>{props.games.loser}</p>
           <p>{props.games.highScore} - {props.games.lowScore}</p>
-          <p onClick={toggleEditGame} className='edit'>Redigera</p>
+          <p onClick={() =>setGameToEdit(props.games._id)} className='edit'>Redigera</p>
         </ul>
 
       </div>

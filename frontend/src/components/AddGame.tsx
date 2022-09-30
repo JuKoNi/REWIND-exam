@@ -1,4 +1,5 @@
 import { useState, useEffect, ChangeEvent } from 'react';
+import { API_URL } from '../models/constant';
 
 
 type Props = {
@@ -24,14 +25,14 @@ const AddGame = (props: Props) => {
     const handleNumber = (e:FormType) => {
         setNumberOfPlayers(e.target.value);
     };
+    function titleCase(str:string){
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
 
 
-    async function addGame(event:any) { 
+    async function addGame(event:React.FormEvent<HTMLInputElement>) { 
 
-        function titleCase(str:string){
-            return str.charAt(0).toUpperCase() + str.slice(1);
-        }
-        // event.preventDefault();
+        event.preventDefault();
 
         const games:object = {
             typeOfGame: titleCase(typeOfGame),
@@ -43,13 +44,15 @@ const AddGame = (props: Props) => {
             playerFour: {name: titleCase(playerFour), result: resultPlayerFour},
 
         };
-        const response = await fetch('http://localhost:8080/addgame', {
+        let endpoint = '/addgame';
+        const response = await fetch(API_URL + endpoint, {
             method: 'POST',
             body: JSON.stringify(games),
             headers: {'Content-Type': 'application/json'}
           });
           const data = await response.json();
-          console.log(data);
+
+          props.toggleAddGame()
         
     }
   return (
@@ -148,11 +151,6 @@ const AddGame = (props: Props) => {
             <input className='btn' onClick={addGame} type="submit" value="Lägg till match" />
             <button className='btn abort' onClick={props.toggleAddGame}>Avbryt</button>
         </div> 
-
-
-
-
-
 
     </form>
   )

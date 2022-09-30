@@ -8,7 +8,6 @@ type Props = {
 }
 
 const SpecificGame = (props: Props) => {
-    const [ editGame, setEditGame ] = useState<boolean>(false)
 
   return (
     <ul className='games-list'>
@@ -17,7 +16,6 @@ const SpecificGame = (props: Props) => {
     <p>{props.games.winner}</p>
     <p>{props.games.loser}</p>
     <p>{props.games.highScore} - {props.games.lowScore}</p>
-    <p className='edit'>Redigera</p>
 </ul>
   )
 }

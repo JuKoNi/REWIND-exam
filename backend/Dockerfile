@@ -14,8 +14,8 @@ RUN npm install -g http-server
 COPY package*.json ./
 
 #installera npm-paket
-RUN npm install
-
+#RUN npm install
+RUN npm ci --only=production
 #Kopiera över all kod från aktuell mapp på datorn till /app i image
 COPY . .
 

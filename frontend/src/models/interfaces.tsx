@@ -1,4 +1,5 @@
 export interface GameInterface {
+    _id: string
     typeOfGame: string,
     date: string,
     numberOfPlayers: string,
@@ -8,27 +9,20 @@ export interface GameInterface {
     lowScore: number,
     playerOne: {
         name: string,
-        result: number
+        result: string
     },
     playerTwo: {
         name: string,
-        result: number
+        result: string
     },
     playerThree: {
         name: string,
-        result: number
+        result: string
     },
     playerFour: {
         name: string,
-        result: number
+        result: string
     },
     name: string,
     result: string
-}
-
-export interface ResultInterface {
-    winners:any,
-    losers:any,
-    highScore:number,
-    lowScore:number
 }

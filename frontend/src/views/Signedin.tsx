@@ -7,6 +7,7 @@ import MyGames from '../components/MyGames';
 import FriendGames from '../components/FriendGames';
 import SpecificGame from '../components/SpecificGame';
 import { GameInterface } from '../models/interfaces';
+import { API_URL } from '../models/constant'
 
 
 type Props = {
@@ -14,13 +15,12 @@ type Props = {
 }
 
 const Signedin = (props: Props) => {
-    
+
     const [ showAddGame, setShowAddGame ] = useState<boolean>(false);
     const [ showAllGames, setShowAllGames ] = useState<boolean>(false);
     const [ showTenLatest, setShowTenLatest ] = useState<boolean>(false);
     const [ showFilterGame, setShowFilterGame ] = useState<boolean>(false);
     const [ showFilterName, setShowFilterName ] = useState<boolean>(false);
-    const [ showNoWinner, setShowNoWinner ] = useState<boolean>(false);
 
     const [ gameState, setGameState ] = useState<GameInterface[]>([]);
     const [ myGameState, setMyGameState ] = useState<GameInterface[]>([]);
@@ -29,6 +29,7 @@ const Signedin = (props: Props) => {
 
     const [ nameToFind, setNameToFind ] = useState<string>('');
     const [ gameToFind, setGameToFind ] = useState<string>('');
+    const [ gameToEdit, setGameToEdit ] = useState<string>('');
     const [ wins, setWins ] = useState<number>(0);
     const [ attendedGames, setAttendedGames ] = useState<number>(0);
 
@@ -58,8 +59,7 @@ const Signedin = (props: Props) => {
 
         return list;
     };
-
-
+    
 
     function findWinner(popGames:GameInterface[]) {
         for (let game of popGames) {
@@ -138,6 +138,10 @@ const Signedin = (props: Props) => {
         setShowAllGames(false);
         setShowTenLatest(false);
         setShowFilterName(false);
+
+        if (showFilterGame === false) {
+            setGameToFind('')
+        }
     };
     function toggleFilterName() {
         setShowFilterName(!showFilterName);
@@ -145,22 +149,20 @@ const Signedin = (props: Props) => {
         setShowAllGames(false);
         setShowTenLatest(false);
         setShowFilterGame(false);
+
+        if(showFilterName === false) {
+            setNameToFind('')
+        }
     };
-    function toggleNoWinner() {
-        setShowNoWinner(!showNoWinner);
-        setShowAddGame(false);
-        setShowAllGames(false);
-        setShowTenLatest(false);
-        setShowFilterGame(false);
-        setShowFilterName(false);
-
-    }
-
+    function toggleEditGame() {
+        setGameToEdit(gameToEdit)
+      }
 
 
     // API calls
     async function getAllGames() {
-        const response = await fetch('http://localhost:8080/allgames');
+        let endpoint = '/allgames'
+        const response = await fetch(API_URL + endpoint);
         const data = await response.json();
         games = data;
 
@@ -169,8 +171,8 @@ const Signedin = (props: Props) => {
     };
 
     async function getMyGames() {
-        let url = "http://localhost:8080/usergames/" + user;
-        const response = await fetch(url);
+        let endpoint = "/usergames/" + user;
+        const response = await fetch(API_URL + endpoint);
         const data = await response.json();
 
         games = data;
@@ -191,8 +193,8 @@ const Signedin = (props: Props) => {
 
     };
     async function getFriendsGames() {
-        let url = "http://localhost:8080/usergames/" + (titleCase(nameToFind));
-        const response = await fetch(url);
+        let endpoint = "/usergames/" + (titleCase(nameToFind));
+        const response = await fetch(API_URL + endpoint);
         const data = await response.json();
 
         games = data;
@@ -202,8 +204,8 @@ const Signedin = (props: Props) => {
     };
 
     async function getSpecificGame() {
-        let url = "http://localhost:8080/games/" + (titleCase(gameToFind));
-        const response = await fetch(url);
+        let endpoint = "/games/" + (titleCase(gameToFind));
+        const response = await fetch(API_URL + endpoint);
         const data = await response.json();
         console.log(data)
         games = data;
@@ -232,6 +234,8 @@ const Signedin = (props: Props) => {
             toggleShowAll={toggleShowAll}
             key={index}
             games={game}
+            getAllGames={getAllGames}
+            toggleEditGame={toggleEditGame}
 
             />
 
@@ -251,6 +255,8 @@ const Signedin = (props: Props) => {
             key={index}
             games={game}
             user={user}
+            toggleEditGame={toggleEditGame}
+            getAllGames={getAllGames}
             />
         )
     });
@@ -308,7 +314,7 @@ const Signedin = (props: Props) => {
                     <h4>Resultat</h4>
                 </header>
                 {allGames}
-            </section> : ''}
+            </section> : ' '}
 
             {showTenLatest ? <section className='games-section popup'>
                 <h1>{user} har vunnit {wins} av {attendedGames} matcher.</h1>
@@ -320,7 +326,7 @@ const Signedin = (props: Props) => {
                     <h4>Resultat</h4>
                 </header>
                 {myGames}
-            </section> : ''}
+            </section> : ' '}
 
             {showFilterName ? <section className='games-section search popup'>
                 <input onChange={(e) => setNameToFind(e.target.value)} type="text" name="" id="" placeholder='Ange användarnamn'/>
@@ -333,7 +339,7 @@ const Signedin = (props: Props) => {
                     <h4>Resultat</h4>
                 </header>
                 {friendGames}
-            </section> : ''}
+            </section> : ' '}
 
             {showFilterGame ? <section className='games-section search popup'>
                 <input onChange={(e) => setGameToFind(e.target.value)} type="text" name="" id="" placeholder='T.ex tennis, yatzy etc'/>
@@ -346,7 +352,7 @@ const Signedin = (props: Props) => {
                     <h4>Resultat</h4>
                 </header>
                 {specificGame}
-            </section> : ''}
+            </section> : ' '}
 
             {newGame}
 

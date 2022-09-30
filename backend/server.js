@@ -1,5 +1,6 @@
 const express = require('express');
 const nedb = require('nedb-promise');
+//var Datastore = require('nedb');
 const cors = require('cors');
 const app = express();
 
@@ -9,10 +10,10 @@ app.use(express.json());
 
 // en databas för konton
 const accountsDB = new nedb({filename: 'accounts.db', autoload: true});
-
+//var accountsDB = new Datastore({filename: 'accounts.db', autoload: true})
 // en databas för matcher
 const gamesDB = new nedb({filename: 'games.db', autoload: true});
-
+//var gamesDB = new Datastore({filename: 'games.db', autoload: true})
 
 
 // skapa konto - endpoint
@@ -83,7 +84,7 @@ app.post('/addgame', async (request, response) => {
 
 // hämta ALLA matcher
 app.get('/allgames', async (request, response) => {
-    const allGames = await gamesDB.find({ });
+    const allGames =  await gamesDB.find({ });
     if ( allGames.length > 0) {
         response.send(allGames)
     }
@@ -123,7 +124,33 @@ app.get('/games/:game', async (request, response) => {
     if ( specificGame.length > 0 ) {
         response.send(specificGame)
     }
+});
+
+// TA BORT och LÄGG TILL en match baserat på ID
+app.post('/editgame/:id', async (request, response) => {
+    const ID = request.params.id
+    const gameInfo = request.body
+    console.log(gameInfo);
+    console.log(gameInfo.playerOne.name, gameInfo.playerOne.result)
+    const responseObject = {
+        success: false
+    }
+
+    gamesDB.remove({ "_id": ID });
+
+    gamesDB.insert(gameInfo);
+
+    response.json(responseObject);
 })
+
+// TA BORT en match baserat på ID
+// SKITER I DEN HÄR PGA KRÅNGEL O HAR INTE TIIIID
+// app.post('/deletegame/:id', async (request, response) => {
+//     const ID = request.params.id
+
+//     await gamesDB.remove({ "_id": ID });
+//     response.json({success: true})
+// })
 
 
 // starta servern

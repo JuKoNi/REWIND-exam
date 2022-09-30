@@ -1,12 +1,16 @@
-import { useState, ChangeEvent, useEffect } from 'react'
-import { GameInterface } from '../models/interfaces'
+import { useState, ChangeEvent, useEffect } from 'react';
+import { GameInterface } from '../models/interfaces';
+import { API_URL } from '../models/constant';
 
 type Props = {
     toggleEditGame:() => void
-    games:GameInterface
+    games:GameInterface,
+    getAllGames:any
+    setGameToEdit:any
 }
 
 const EditGame = (props: Props) => {
+
     const [ numberOfPlayers, setNumberOfPlayers ] = useState<string>("1");
     const [ typeOfGame, setTypeOfGame ] = useState<string>('');
     const [ date, setDate ] = useState<string>('');
@@ -19,22 +23,33 @@ const EditGame = (props: Props) => {
     const [ resultPlayerThree, setResultPlayerThree ] = useState<string>('');
     const [ resultPlayerFour, setResultPlayerFour ] = useState<string>('');
 
-    type FormType = ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement> ;
 
     useEffect(() => {
-        setNumberOfPlayers(props.games.numberOfPlayers)
+        setNumberOfPlayers(props.games.numberOfPlayers);
+        setTypeOfGame(props.games.typeOfGame);
+        setDate(props.games.date);
+        setPlayerOne(props.games.playerOne.name);
+        setResultPlayerOne(props.games.playerOne.result);
+        setPlayerTwo(props.games.playerTwo.name);
+        setResultPlayerTwo(props.games.playerTwo.result);
+        setPlayerThree(props.games.playerThree.name);
+        setResultPlayerThree(props.games.playerThree.result);
+        setPlayerFour(props.games.playerFour.name);
+        setResultPlayerFour(props.games.playerFour.result);
     }, [])
     
 
-    const handleNumber = (e:FormType) => {
+    const handleNumber = () => {
         setNumberOfPlayers(props.games.numberOfPlayers);
     };
 
-    async function addGame(event:any) { 
+    function titleCase(str:string){
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
 
-        function titleCase(str:string){
-            return str.charAt(0).toUpperCase() + str.slice(1);
-        }
+
+    async function editGame(event:React.FormEvent<HTMLInputElement>) { 
+
         event.preventDefault();
 
         const games:object = {
@@ -47,16 +62,22 @@ const EditGame = (props: Props) => {
             playerFour: {name: titleCase(playerFour), result: resultPlayerFour},
 
         };
-        const response = await fetch('http://localhost:8080/addgame', {
+        
+        let ID = props.games._id
+        const endpoint = '/editgame/' + ID
+        
+        const response = await fetch(API_URL + endpoint, {
             method: 'POST',
             body: JSON.stringify(games),
             headers: {'Content-Type': 'application/json'}
           });
           const data = await response.json();
-          console.log(data);
-        
-    }
 
+          props.getAllGames()
+          props.toggleEditGame()
+        
+    };
+    
 
   return (
     <form action="" className='edit-game-form'>
@@ -72,7 +93,7 @@ const EditGame = (props: Props) => {
 
     <div className='numberOf'>
         <label htmlFor="numberOfPlayers">Antal spelare:</label>
-        <select name="numberOfPlayers" defaultValue={props.games.numberOfPlayers} onChange={handleNumber} id="numberOfPlayers" required>
+        <select name="numberOfPlayers" value={props.games.numberOfPlayers} onChange={handleNumber} id="numberOfPlayers" required>
         
             <option value="1">1</option>
             <option value="2">2</option>
@@ -143,7 +164,7 @@ const EditGame = (props: Props) => {
             </div>
 
             <div>
-                <input onChange={(e) => setPlayerFour(e.target.value)} type="text" name="" id="" defaultValue={props.games.playerFour.name || ''} required/>
+                <input onChange={(e) => setPlayerFour(e.target.value)} type="text" name="" id="" defaultValue={props.games.playerFour.name} required/>
                 <input onChange={(e) => setResultPlayerFour(e.target.value)} type="number" name="" id="" defaultValue={props.games.playerFour.result}  required/>
             </div>
             
@@ -151,8 +172,8 @@ const EditGame = (props: Props) => {
     ) : ('')}
 
     <div>    
-        <input className='btn' onClick={addGame} type="submit" value="Redigera match" />
-        <button className='btn abort' onClick={props.toggleEditGame}>Avbryt</button>
+        <input className='btn edit' onClick={editGame} type="submit" value="Redigera match" />
+        <button className='btn abort' onClick={() => props.setGameToEdit('')}>Avbryt</button>
     </div> 
 
 
