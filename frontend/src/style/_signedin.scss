@@ -14,7 +14,20 @@ main {
         align-items: center;
         gap: 1em;
 
+
+
+
+        .game-header {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+
+
+        }
+
+
     }
+
+}
 
     .welcome-section {
         display: flex;
@@ -33,7 +46,7 @@ main {
 
     }
     
-}
+
 .btn {
     @include buttons;
     font-size: .8em;

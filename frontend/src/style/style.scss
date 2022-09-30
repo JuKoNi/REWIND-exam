@@ -70,7 +70,7 @@
         h1 {
             position: absolute;
             top: 0.5em;
-            left: 18.5em;
+            left: 0.5em;
         }
 
         & > div {
@@ -118,8 +118,41 @@
 
 
 @media only screen and (max-width: 417px) {
+    .App {
+
+        .hero {
+
+            .hero.text {
+                font-size: 1.3em;
+            }
+        }
+        .overlay {
+            min-width: 20em;
+            max-width: 10em;
+            top: 30%;
+            left: 5%;
+
+        }
+    }
     .popup {
-        top: 62%;
+        top: 65%;
+    }
+}
+
+@media only screen and (max-width: 566px) {
+    .App {
+
+        .hero {
+            
+            .hero-text {
+                font-size: 1.6em;
+            }
+        }
+
+        .button-section {
+            flex-direction: column;
+            gap: 0.5em;
+        }
     }
 }
 

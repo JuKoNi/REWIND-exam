@@ -184,8 +184,7 @@ const Signedin = (props: Props) => {
         for (let obj of games) {
   
             if(obj.winner.includes(user!)) {
-                setWins(wins => (wins +1));
-                console.log(obj.loser)     
+                setWins(wins => (wins +1));   
             } 
         }
         
@@ -207,7 +206,7 @@ const Signedin = (props: Props) => {
         let endpoint = "/games/" + (titleCase(gameToFind));
         const response = await fetch(API_URL + endpoint);
         const data = await response.json();
-        console.log(data)
+
         games = data;
         
         games = findWinner(games);
@@ -299,8 +298,8 @@ const Signedin = (props: Props) => {
                     <button onClick={toggleAddGame} className='btn'>Lägg till ny match</button>
                     <button onClick={toggleShowAll} className='btn'>Se alla matcher</button>
                     <button onClick={toggleShowTen} className='btn'>Se mina senaste matcher</button>
-                    <button onClick={toggleFilterGame} className='btn'>Filtrera på typ av match</button>
-                    <button onClick={toggleFilterName} className='btn'>Filtrera på användarnamn</button>
+                    <button onClick={toggleFilterGame} className='btn'>Sök på typ av match</button>
+                    <button onClick={toggleFilterName} className='btn'>Sök på användarnamn</button>
                 </nav>
             </header>
 
@@ -329,7 +328,7 @@ const Signedin = (props: Props) => {
             </section> : ' '}
 
             {showFilterName ? <section className='games-section search popup'>
-                <input onChange={(e) => setNameToFind(e.target.value)} type="text" name="" id="" placeholder='Ange användarnamn'/>
+                <input className='input-search' onChange={(e) => setNameToFind(e.target.value)} type="text" name="" id="" placeholder='Ange användarnamn'/>
                 <button className='btn' onClick={getFriendsGames}>Se alla matcher {titleCase(nameToFind)} deltagit i</button>
                 <header className='game-header'>
                     <h4>Datum</h4>
@@ -338,11 +337,13 @@ const Signedin = (props: Props) => {
                     <h4>Förlorare</h4>
                     <h4>Resultat</h4>
                 </header>
-                {friendGames}
+                <div className='search-list'>
+                    {friendGames}
+                </div>
             </section> : ' '}
 
             {showFilterGame ? <section className='games-section search popup'>
-                <input onChange={(e) => setGameToFind(e.target.value)} type="text" name="" id="" placeholder='T.ex tennis, yatzy etc'/>
+                <input className='input-search' onChange={(e) => setGameToFind(e.target.value)} type="text" name="" id="" placeholder='T.ex tennis, yatzy etc'/>
                 <button className='btn' onClick={getSpecificGame}>Sök</button>
                 <header className='game-header'>
                     <h4>Datum</h4>
@@ -351,7 +352,9 @@ const Signedin = (props: Props) => {
                     <h4>Förlorare</h4>
                     <h4>Resultat</h4>
                 </header>
-                {specificGame}
+                <div className='search-list'>
+                    {specificGame}
+                </div>
             </section> : ' '}
 
             {newGame}

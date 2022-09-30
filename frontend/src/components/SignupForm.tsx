@@ -32,7 +32,7 @@ const SignupForm = (props: Props) => {
           headers: {'Content-Type': 'application/json'}
         });
         const data = await response.json();
-        console.log(data);
+
         if (data.success && username != '' && password != '') {
           localStorage.setItem('user', titleCase(username));
 

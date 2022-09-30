@@ -30,7 +30,7 @@ const LoginForm = (props: Props) => {
           headers: {'Content-Type': 'application/json'}
         });
         const data = await response.json();
-        console.log(data);
+
         if (data.success) {
           localStorage.setItem('user', titleCase(data.user));
           navigate('/signedin');

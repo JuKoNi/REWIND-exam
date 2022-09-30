@@ -10,6 +10,22 @@
     max-width: 85vw;
     min-width: 95vw;
 
+    .search-list {
+
+        & > ul {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+        }
+
+    }
+
+    .input-search {
+        font-size: 1.2em;
+        border-radius: .5em;
+        padding: .5em;
+        border: none;
+    }
+
     h1 {
         text-align: center;
         padding: 1em;
@@ -35,6 +51,10 @@
 
     }
 }
+
+
+
+
 .edit-game-form {
     background-color: white;
     border: 3px dotted red;
