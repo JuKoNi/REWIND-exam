@@ -64,13 +64,13 @@ const Signedin = (props: Props) => {
     function findWinner(popGames:GameInterface[]) {
         for (let game of popGames) {
 
-        if (game.numberOfPlayers === "1") {
+        if (game.numberOfPlayers === "1" ) {
           game.loser = "(ingen)";
           game.lowScore = 0
         }
 
         for (const [name, value] of Object.entries(game)) {
-          if ( game.numberOfPlayers === "2" && game.playerOne.result === game.playerTwo.result) {
+          if ( game.numberOfPlayers === "2" && game.playerOne.result === game.playerTwo.result ) {
             game.loser = "(ingen)"
           }
     
@@ -91,7 +91,7 @@ const Signedin = (props: Props) => {
             if (parseInt(value.result) < game.lowScore) {
               game.lowScore = parseInt(value.result);
               game.loser = value.name;
-            } else if (parseInt(value.result) == game.lowScore) {
+            } else if (parseInt(value.result) == game.lowScore || value.result === 0) {
               game.loser = game.loser ? game.loser +' ' +'&'+ ' ' + value.name : value.name;
             }
           }
@@ -176,19 +176,32 @@ const Signedin = (props: Props) => {
         const data = await response.json();
 
         games = data;
-        setAttendedGames(attendedGames => (attendedGames = games.length > 10 ? 10 : games.length));
-        
-        games = findWinner(games);
 
-        
-        for (let obj of games) {
-  
-            if(obj.winner.includes(user!)) {
-                setWins(wins => (wins +1));   
-            } 
+        let mySortedGames = sortList(games);
+        mySortedGames = findWinner(mySortedGames)
+
+        if (mySortedGames.length > 10) {
+            let myLastTen = mySortedGames.slice(0, 10)
+            
+            for (let obj of myLastTen) {
+      
+                if(obj.winner.includes(user!)) {
+                    setWins(wins => (wins +1));   
+                } 
+            }
+
+        } else {
+            for (let obj of mySortedGames) {
+      
+                if(obj.winner.includes(user!)) {
+                    setWins(wins => (wins +1));   
+                } 
+            }
+            
         }
-        
-        setMyGameState(games);
+        setAttendedGames(attendedGames => (attendedGames = games.length > 10 ? 10 : games.length));
+        setMyGameState(mySortedGames);
+ 
 
     };
     async function getFriendsGames() {
@@ -242,9 +255,11 @@ const Signedin = (props: Props) => {
     });
 
     
-    let mySortedGames = sortList([...myGameState]);
+    let mySortedGames = [...myGameState];
+    console.log(mySortedGames);
+    
 
-    mySortedGames.length = mySortedGames.length > 10 ? 10 : mySortedGames.length;
+    // mySortedGames.length = mySortedGames.length > 10 ? 10 : mySortedGames.length;
 
     const myGames = mySortedGames.map((game, index) => {
         return (
@@ -297,7 +312,7 @@ const Signedin = (props: Props) => {
                 <nav className='btn-section'>
                     <button onClick={toggleAddGame} className='btn'>Lägg till ny match</button>
                     <button onClick={toggleShowAll} className='btn'>Se alla matcher</button>
-                    <button onClick={toggleShowTen} className='btn'>Se mina senaste matcher</button>
+                    <button onClick={toggleShowTen} className='btn'>Se mina matcher</button>
                     <button onClick={toggleFilterGame} className='btn'>Sök på typ av match</button>
                     <button onClick={toggleFilterName} className='btn'>Sök på användarnamn</button>
                 </nav>
@@ -305,56 +320,30 @@ const Signedin = (props: Props) => {
 
             {showAllGames ? <section className='games-section popup'>
                 <h1>Alla registrerade matcher:</h1>
-                <header className='game-header'>
-                    <h4>Datum</h4>
-                    <h4>Typ av match</h4>
-                    <h4>Vinnare</h4>
-                    <h4>Förlorare</h4>
-                    <h4>Resultat</h4>
-                </header>
+
                 {allGames}
             </section> : ' '}
 
             {showTenLatest ? <section className='games-section popup'>
-                <h1>{user} har vunnit {wins} av {attendedGames} matcher.</h1>
-                <header className='game-header'>
-                    <h4>Datum</h4>
-                    <h4>Typ av match</h4>
-                    <h4>Vinnare</h4>
-                    <h4>Förlorare</h4>
-                    <h4>Resultat</h4>
-                </header>
+                <h1>Du har vunnit {wins} av de senaste {attendedGames} matcherna.</h1>
+
                 {myGames}
             </section> : ' '}
 
             {showFilterName ? <section className='games-section search popup'>
                 <input className='input-search' onChange={(e) => setNameToFind(e.target.value)} type="text" name="" id="" placeholder='Ange användarnamn'/>
-                <button className='btn' onClick={getFriendsGames}>Se alla matcher {titleCase(nameToFind)} deltagit i</button>
-                <header className='game-header'>
-                    <h4>Datum</h4>
-                    <h4>Typ av match</h4>
-                    <h4>Vinnare</h4>
-                    <h4>Förlorare</h4>
-                    <h4>Resultat</h4>
-                </header>
-                <div className='search-list'>
+                <button className='btn search-btn' onClick={getFriendsGames}>Se alla matcher {titleCase(nameToFind)} deltagit i</button>
+
                     {friendGames}
-                </div>
+
             </section> : ' '}
 
             {showFilterGame ? <section className='games-section search popup'>
                 <input className='input-search' onChange={(e) => setGameToFind(e.target.value)} type="text" name="" id="" placeholder='T.ex tennis, yatzy etc'/>
-                <button className='btn' onClick={getSpecificGame}>Sök</button>
-                <header className='game-header'>
-                    <h4>Datum</h4>
-                    <h4>Typ av match</h4>
-                    <h4>Vinnare</h4>
-                    <h4>Förlorare</h4>
-                    <h4>Resultat</h4>
-                </header>
-                <div className='search-list'>
+                <button className='btn search-btn' onClick={getSpecificGame}>Sök</button>
+
                     {specificGame}
-                </div>
+
             </section> : ' '}
 
             {newGame}

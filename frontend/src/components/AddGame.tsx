@@ -33,7 +33,10 @@ const AddGame = (props: Props) => {
     async function addGame(event:React.FormEvent<HTMLInputElement>) { 
 
         event.preventDefault();
-
+        if (!typeOfGame || !date || !numberOfPlayers || !playerOne || !resultPlayerOne) {
+            alert('Vänligen fyll i alla fält.')
+            return
+        }
         const games:object = {
             typeOfGame: titleCase(typeOfGame),
             date: date,
@@ -56,7 +59,9 @@ const AddGame = (props: Props) => {
         
     }
   return (
-    <form action="" className='add-game-form popup'>
+    
+    <form action="" className='add-game-form popup' method='post'>
+        
         <div className='date'>
             <label htmlFor="date">Datum:</label>
             <input  onChange={(e) => setDate(e.target.value)} type="date" name="date" id="date" required/>
@@ -64,7 +69,7 @@ const AddGame = (props: Props) => {
 
         <div className='type'>
             <label htmlFor="typeOfGame">Typ av match:</label>
-            <input  onChange={(e) => setTypeOfGame(e.target.value)} type="text" name="typeOfGame" id="typeOfGame" required/>
+            <input  onChange={(e) => setTypeOfGame(e.target.value)} type="text" name="typeOfGame" id="typeOfGame" required pattern="[-]?[0-9]*[.,]?[0-9]+"/>
         </div>
 
         <div className='numberOf'>
@@ -80,8 +85,8 @@ const AddGame = (props: Props) => {
         { numberOfPlayers === "1" ? (
             <div>
 
-                <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" placeholder='Användarnamn' required/>
-                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat' required/>
+                <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="player" id="" placeholder='Användarnamn' required/>
+                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="result" id="" placeholder='Resultat' required min="0" max="500"/>
                 
             </div>
 
@@ -90,12 +95,12 @@ const AddGame = (props: Props) => {
             <div className='multiple-players'>
                 <div>
                     <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 1' required/>
-                    <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 1' required/>
+                    <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 1' required min="0" max="500"/>
                 </div>
 
                 <div>
                     <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 2' required/>
-                    <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 2' required/>
+                    <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 2' required min="0" max="500"/>
                 </div>
                 
             </div>
@@ -106,17 +111,17 @@ const AddGame = (props: Props) => {
 
                 <div>
                     <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 1' required/>
-                    <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 1' required/>
+                    <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 1' required min="0" max="500"/>
                 </div>
 
                 <div>
                     <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 2' required/>
-                    <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 2' required/>
+                    <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 2' required min="0" max="500"/>
                 </div>
 
                 <div>
                     <input onChange={(e) => setPlayerThree(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 3' required/>
-                    <input onChange={(e) => setResultPlayerThree(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 3' required/>
+                    <input onChange={(e) => setResultPlayerThree(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 3' required min="0" max="500"/>
                 </div>
                 
             </div>
@@ -126,22 +131,22 @@ const AddGame = (props: Props) => {
 
                 <div>
                     <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 1' required/>
-                    <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 1' required/>
+                    <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 1' required min="0" max="500"/>
                 </div>
 
                 <div>
                     <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 2' required/>
-                    <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 2' required/>
+                    <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 2' required min="0" max="500"/>
                 </div>
 
                 <div>
                     <input onChange={(e) => setPlayerThree(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 3' required/>
-                    <input onChange={(e) => setResultPlayerThree(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 3' required/>
+                    <input onChange={(e) => setResultPlayerThree(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 3' required min="0" max="500"/>
                 </div>
 
                 <div>
                     <input onChange={(e) => setPlayerFour(e.target.value)} type="text" name="" id="" placeholder='Användarnamn spelare 4' required/>
-                    <input onChange={(e) => setResultPlayerFour(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 4' required/>
+                    <input onChange={(e) => setResultPlayerFour(e.target.value)} type="number" name="" id="" placeholder='Resultat spelare 4' required min="0" max="500"/>
                 </div>
                 
             </div>

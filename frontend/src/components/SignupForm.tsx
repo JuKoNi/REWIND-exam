@@ -10,6 +10,7 @@ type Props = {
 const SignupForm = (props: Props) => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
@@ -19,6 +20,7 @@ const SignupForm = (props: Props) => {
 
 
     async function signup() {
+      setLoading(true)
 
         const account:object = {
           username: titleCase(username),
@@ -37,15 +39,22 @@ const SignupForm = (props: Props) => {
           localStorage.setItem('user', titleCase(username));
 
           navigate('/signedin');
+          setLoading(false)
         }
         if (!data.success) {
-          alert('Fel, fel, feeel! Försök igen.')
+          alert('Det verkar som om användarnamnet redan finns. Prova ett annat!')
+          setLoading(false)
         }
 
       };
     
   return (
-    <section id='signupForm' className='signup overlay'>
+    <div className='container'>
+      {loading ? (
+      <div className='loader-container'>
+        <div className='spinner'></div>
+      </div> ) : (
+      <section id='signupForm' className='signup overlay'>
         <h2>Sign up</h2>
         <h1 onClick={props.toggleSignup} className='close'>X</h1>
         <div>
@@ -57,7 +66,12 @@ const SignupForm = (props: Props) => {
         <input onChange={(e) => setPassword(e.target.value)} type="password" id="password" placeholder='Ange lösenord' required />
         </div>
         <button onClick={signup} className="btn signup">SIGN ME UP</button>
-  </section>
+      </section>
+      )}
+
+
+
+    </div>
   )
 }
 

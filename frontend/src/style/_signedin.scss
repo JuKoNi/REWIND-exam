@@ -12,18 +12,19 @@ main {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 1em;
 
+        // .search-list {
 
-
-
-        .game-header {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-
-
-        }
-
+        //     .friend, .game{
+        //         display: grid;
+        //         grid-template-columns: repeat(5, 1fr);
+    
+        //     }
+        //     & > div:nth-child(odd) {
+        //         background-color: #90c07c;
+        //     }
+    
+        // }
 
     }
 
@@ -82,10 +83,54 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-top: 1em;
 }
 
 @media only screen and (max-width: 496px) {
     main {
+
+        // .search {
+
+        //     & > div {
+
+
+        //         .game-header {
+        //             padding-inline-start: 1em;
+        //             font-size: 14px;
+        //             display: flex;
+        //             flex: 1;
+        //             flex-direction: column;
+        //             max-width: 50vw;
+        //             min-width: 0;
+        //             max-height: 10em;
+        //             min-height: 10em;
+        //             justify-content: space-evenly;
+        //             border: none;
+        //         }
+
+        //         .games-list {
+        //             padding-inline-start: 1em;
+        //             font-size: 14px;
+        //             line-height: 1em;
+        //             padding: 1em 0;
+        //             display: flex;
+        //             flex: 1;
+        //             flex-direction: column;
+        //             max-width: 50vw;
+        //             min-width: 0;
+        //             max-height: 10em;
+        //             min-height: 10em;
+        //             padding: 0;
+        //             justify-content: space-evenly;
+        //             border: none;
+
+        //         }
+    
+        
+        //         }
+            
+        // }
+
 
         .welcome-section { 
             color: white;

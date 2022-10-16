@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -11,6 +11,7 @@ import LoginForm from './components/LoginForm';
 function App() {
   const [ showLogin, setShowLogin ] = useState<boolean>(false);
   const [ showSignup, setShowSignup ] = useState<boolean>(false);
+
 
   const toggleLogin = () => {
     setShowLogin(showLogin => !showLogin)
@@ -35,15 +36,17 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
 
-      <Hero />
+        <Header />
 
-      <section className='button-section'>
-        <button onClick={toggleLogin} className='btn login'>LOGGA IN</button>
-        <h3>ELLER</h3>
-        <button onClick={toggleSignup} className='btn signup'>SIGN ME UP</button>
-      </section>
+        <Hero />
+
+        <section className='button-section'>
+          <button onClick={toggleLogin} className='btn login'>LOGGA IN</button>
+          <h3>ELLER</h3>
+          <button onClick={toggleSignup} className='btn signup'>SIGN ME UP</button>
+        </section>
+      
 
       {clickedLoggedin}
       {clickedSignedup}

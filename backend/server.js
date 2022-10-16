@@ -120,7 +120,7 @@ app.post('/editgame/:id', async (request, response) => {
     const gameInfo = request.body
 
     const responseObject = {
-        success: false
+        message: {gameInfo}
     }
 
     gamesDB.remove({ "_id": ID });

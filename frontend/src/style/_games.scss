@@ -1,16 +1,69 @@
-.game-header {
-    padding-inline-start: 40px;
+@use 'variables';
+.popup {
+    position: absolute;
     max-width: 85vw;
     min-width: 95vw;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    padding-bottom: .6em;
+    top: 55%;
+    background-color: #749b64;
+    border-radius: .5em;
+    padding: 3em 0;
+
+    .search {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+
+    .game-header {
+        padding-inline-start: 40px;
+        max-width: 85vw;
+        min-width: 95vw;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        font-weight: light;
+        border-bottom: 2px solid black;
+    
+    }
+    .friend, .game {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .search-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 2em;
+
+        .friend, .game{
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+        
+        }
+        & > div:nth-child(odd) {
+            background-color: #90c07c;
+        }
+        
+    }
+
+
+    .abort {
+        background-color: #96271b;
+    }
 }
-.games-section {
+
+
+
+
+.games-section, .game, .friend {
     max-width: 85vw;
     min-width: 95vw;
 
-    .search-list {
+    & > div:nth-child(even) {
+        background-color: #90c07c;
+    }
+
+
+    .search {
 
         & > ul {
             display: grid;
@@ -32,13 +85,12 @@
     }
 
     .games-list {
-
         max-width: 85vw;
         min-width: 95vw;
         display: grid;
         grid-template-columns: repeat(6, 1fr);
         line-height: 3em;
-        border-top: 2px solid black;
+        border-bottom: 2px solid black;
 
         .edit {
             position: relative;
@@ -49,8 +101,15 @@
             font-size: .8em;
         }
 
+
     }
+    
+    .friend, .game {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
 }
+
 
 
 
@@ -61,25 +120,18 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 3em 0;
+    padding: 2em 0;
     align-items: center;
     justify-content: space-evenly;
-    position: relative;
+    width: 100%;
     line-height: 1.5em;
+    position: absolute;
+    z-index: 1;
 
     & > div {
         display: flex;
         flex-direction: column;
         gap: .5em;
-    }
-
-    .delete {
-        position: absolute;
-        max-width: 5em;
-        max-height: 1em;
-        top: 0;
-        background-color: red;
-        margin-top: 0;
     }
 
     .edit {
@@ -88,22 +140,60 @@
 }
 
 @media only screen and (max-width: 496px) {
-    .games-section {
+    .games-section, .friend, .game {
+
+        & > div {
+            display: flex;
+            max-height: 10em;
+            min-height: 10em;
+            position: relative;
+            border-bottom: 2px solid black;
+
+
+        }
 
 
         .game-header {
             padding-inline-start: 1em;
             font-size: 14px;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            max-width: 50vw;
+            min-width: 0;
+            max-height: 10em;
+            min-height: 10em;
+            justify-content: space-evenly;
+            border: none;
+
+
         }
 
-        .games-list {
+        .games-list{
             padding-inline-start: 1em;
             font-size: 14px;
             line-height: 1em;
             padding: 1em 0;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            max-width: 50vw;
+            min-width: 0;
+            max-height: 10em;
+            min-height: 10em;
+            padding: 0;
+            justify-content: space-evenly;
+            border: none;
+
+            .edit {
+                position: absolute;
+                right: 1em;
+                bottom: 0;
+            }
+        
+
         }
     }
-
 
 
 }
