@@ -8,7 +8,7 @@ import MyGames from './MyGames';
 
 type Props = {
     toggleShowAll: () => void,
-    toggleEditGame: () => void
+    editGame: () => void
     games:GameInterface,
     key:number
     getAllGames:any
@@ -18,13 +18,20 @@ type Props = {
 
 const AllGames = (props: Props) => {
   const [ gameToEdit, setGameToEdit ] = useState<string>('');
+  const [ showEditGame, setShowEditGame ] = useState<boolean>(false);
+
+  function toggleEditGame() {
+    setShowEditGame(!showEditGame);
+    setGameToEdit(props.games._id)
+}
 
 
   let haxxor = false;
   haxxor = gameToEdit ? true : false;
   const editOneGame = haxxor && props.games._id === gameToEdit ? (
     <EditGame 
-    toggleEditGame={props.toggleEditGame}
+    toggleEditGame={toggleEditGame}
+    editGame={props.editGame}
     games={props.games}
     getAllGames={props.getAllGames}
     setGameToEdit={setGameToEdit} />)
@@ -34,7 +41,7 @@ const AllGames = (props: Props) => {
 
   return (
       <div>
-        {editOneGame}
+        {showEditGame ? editOneGame : ''}
         <header className='game-header'>
           <h4>Datum</h4>
           <h4>Typ av match</h4>
@@ -48,7 +55,7 @@ const AllGames = (props: Props) => {
           <p>{props.games.winner}</p>
           <p>{props.games.loser}</p>
           <p>{props.games.highScore} - {props.games.lowScore}</p>
-          <p onClick={() =>setGameToEdit(props.games._id)} className='edit'>Redigera</p>
+          <p onClick={toggleEditGame} className='edit'>Redigera</p>
         </ul>
 
       </div>

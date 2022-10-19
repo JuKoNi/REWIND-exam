@@ -1,9 +1,11 @@
 import { useState, ChangeEvent, useEffect } from 'react';
 import { GameInterface } from '../models/interfaces';
 import { API_URL } from '../models/constant';
+import { useNavigate } from "react-router-dom";
 
 type Props = {
-    toggleEditGame:() => void
+    toggleEditGame: () => void
+    editGame: () => void,
     games:GameInterface,
     getAllGames:any
     setGameToEdit:any
@@ -36,8 +38,8 @@ const EditGame = (props: Props) => {
         setResultPlayerThree(props.games.playerThree.result);
         setPlayerFour(props.games.playerFour.name);
         setResultPlayerFour(props.games.playerFour.result);
-    }, [])
-    
+    }, []);
+    let navigate = useNavigate()    
 
     const handleNumber = () => {
         setNumberOfPlayers(props.games.numberOfPlayers);
@@ -48,9 +50,27 @@ const EditGame = (props: Props) => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
-    const resetValue = (event:any) => {
-        event.target.value = ''
+    function resetPlayer1() {
+        setPlayerOne('');
+        setResultPlayerOne('');
     }
+
+    function resetPlayer2() {
+        setPlayerTwo('');
+        setResultPlayerTwo('');
+    };
+    function resetPlayer3() {
+        setPlayerThree('');
+        setResultPlayerThree('');
+    };
+    function resetPlayer4() {
+        setPlayerFour('');
+        setResultPlayerFour('');
+    };
+
+
+
+
     async function editGame(event:React.FormEvent<HTMLInputElement>) { 
 
         event.preventDefault();
@@ -111,8 +131,9 @@ const EditGame = (props: Props) => {
     </div>
     { numberOfPlayers === "1" ? (
         <div>
-            <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="player1" id="player1" defaultValue={props.games.playerOne.name} required/>
-            <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="result" id="result" defaultValue={props.games.playerOne.result} required min="0" max="500"/>
+            <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="player1" id="player1" value={playerOne} required/>
+            <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="result" id="result"  value={resultPlayerOne} required min="0" max="500"/>
+            <span onClick={resetPlayer1}>X</span>
             
         </div>
 
@@ -120,14 +141,14 @@ const EditGame = (props: Props) => {
     { numberOfPlayers === "2" ? (
         <div className='multiple-players'>
             <div>
-                <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" defaultValue={props.games.playerOne.name} required/>
-                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" defaultValue={props.games.playerOne.result} required min="0" max="500"/> <span></span>
+                <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" value={playerOne} required/>
+                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" value={resultPlayerOne} required min="0" max="500"/> <span onClick={resetPlayer1}>X</span>
             </div>
 
             <div>
-                <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="player2" id="player2" defaultValue={props.games.playerTwo.name} required/>
-                <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="result2" id="result2" defaultValue={props.games.playerTwo.result} required min="0" max="500"/>
-                <span onClick={handleNumber}>X</span>
+                <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="player2" id="player2" value={playerTwo} required/>
+                <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="result2" id="result2" value={resultPlayerTwo} required min="0" max="500"/>
+                <span onClick={resetPlayer2}>X</span>
             </div>
             
         </div>
@@ -137,18 +158,19 @@ const EditGame = (props: Props) => {
         <div className='multiple-players'>
 
             <div>
-                <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" defaultValue={props.games.playerOne.name} required/>
-                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" defaultValue={props.games.playerOne.result} required min="0" max="500"/>
+                <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="player1" id="player1" value={playerOne} required/>
+                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="result1" id="result1" value={resultPlayerOne} required min="0" max="500"/>
+                <span onClick={resetPlayer1}>X</span>
             </div>
 
             <div>
-                <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="player2" id="player2" defaultValue={props.games.playerTwo.name} required/>
-                <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="result2" id="result2" defaultValue={props.games.playerTwo.result} min="0" max="500" required/> <span>X</span>
+                <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="player2" id="player2" value={playerTwo} required/>
+                <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="result2" id="result2" value={resultPlayerTwo} min="0" max="500" required/> <span onClick={resetPlayer2}>X</span>
             </div>
 
             <div>
-                <input onChange={(e) => setPlayerThree(e.target.value)} type="text" name="player3" id="player3" defaultValue={props.games.playerThree.name} required/>
-                <input onChange={(e) => setResultPlayerThree(e.target.value)} type="number" name="result3" id="result3" defaultValue={props.games.playerThree.result} min="0" max="500" required/> <span>X</span>
+                <input onChange={(e) => setPlayerThree(e.target.value)} type="text" name="player3" id="player3" value={playerThree} required/>
+                <input onChange={(e) => setResultPlayerThree(e.target.value)} type="number" name="result3" id="result3" value={resultPlayerThree} min="0" max="500" required/> <span onClick={resetPlayer3}>X</span>
             </div>
             
         </div>
@@ -157,23 +179,24 @@ const EditGame = (props: Props) => {
         <div className='multiple-players'>
 
             <div>
-                <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="" id="" defaultValue={props.games.playerOne.name} required/>
-                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="" id="" defaultValue={props.games.playerOne.result} min="0" max="500" required/>
+                <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="player1" id="player1" value={playerOne} required/>
+                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="result1" id="result1" value={resultPlayerOne} min="0" max="500" required/>
+                <span onClick={resetPlayer1}>X</span>
             </div>
 
             <div>
-                <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="player2" id="player2" defaultValue={props.games.playerTwo.name} required/>
-                <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="result2" id="result2" defaultValue={props.games.playerTwo.result} min="0" max="500" required/> <span>X</span>
+                <input onChange={(e) => setPlayerTwo(e.target.value)} type="text" name="player2" id="player2" value={playerTwo} required/>
+                <input onChange={(e) => setResultPlayerTwo(e.target.value)} type="number" name="result2" id="result2" value={resultPlayerTwo} min="0" max="500" required/> <span onClick={resetPlayer2}>X</span>
             </div>
 
             <div>
-                <input onChange={(e) => setPlayerThree(e.target.value)} type="text" name="player3" id="player3" defaultValue={props.games.playerThree.name} required/>
-                <input onChange={(e) => setResultPlayerThree(e.target.value)} type="number" name="result3" id="result3" defaultValue={props.games.playerThree.result} min="0" max="500" required/> <span>X</span>
+                <input onChange={(e) => setPlayerThree(e.target.value)} type="text" name="player3" id="player3" value={playerThree}required/>
+                <input onChange={(e) => setResultPlayerThree(e.target.value)} type="number" name="result3" id="result3" value={resultPlayerThree} min="0" max="500" required/> <span onClick={resetPlayer3}>X</span>
             </div>
 
             <div>
-                <input onChange={(e) => setPlayerFour(e.target.value)} type="text" name="player4" id="player4" defaultValue={props.games.playerFour.name} required/>
-                <input onChange={(e) => setResultPlayerFour(e.target.value)} type="number" name="result4" id="result4" defaultValue={props.games.playerFour.result} min="0" max="500" required/> <span>X</span>
+                <input onChange={(e) => setPlayerFour(e.target.value)} type="text" name="player4" id="player4" value={playerFour} required/>
+                <input onChange={(e) => setResultPlayerFour(e.target.value)} type="number" name="result4" id="result4" value={resultPlayerFour} min="0" max="500" required/> <span onClick={resetPlayer4}>X</span>
             </div>
             
         </div>
@@ -181,7 +204,8 @@ const EditGame = (props: Props) => {
 
     <div>    
         <input className='btn edit' onClick={editGame} type="submit" value="Redigera match" />
-        <input className='btn abort' onClick={editGame} type="submit" value="Avbryt" />
+        <button className='btn abort' onClick={props.toggleEditGame}>Avbryt</button> 
+
     </div> 
 
 

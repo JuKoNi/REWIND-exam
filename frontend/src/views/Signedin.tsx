@@ -154,9 +154,12 @@ const Signedin = (props: Props) => {
             setNameToFind('')
         }
     };
-    function toggleEditGame() {
+
+    function editGame() {
         setGameToEdit(gameToEdit)
-      }
+
+    }
+    
 
 
     // API calls
@@ -183,17 +186,17 @@ const Signedin = (props: Props) => {
         if (mySortedGames.length > 10) {
             let myLastTen = mySortedGames.slice(0, 10)
             
-            for (let obj of myLastTen) {
+            for (let game of myLastTen) {
       
-                if(obj.winner.includes(user!)) {
+                if(game.winner.includes(user!)) {
                     setWins(wins => (wins +1));   
                 } 
             }
 
         } else {
-            for (let obj of mySortedGames) {
+            for (let game of mySortedGames) {
       
-                if(obj.winner.includes(user!)) {
+                if(game.winner.includes(user!)) {
                     setWins(wins => (wins +1));   
                 } 
             }
@@ -201,9 +204,8 @@ const Signedin = (props: Props) => {
         }
         setAttendedGames(attendedGames => (attendedGames = games.length > 10 ? 10 : games.length));
         setMyGameState(mySortedGames);
- 
-
     };
+
     async function getFriendsGames() {
         let endpoint = "/usergames/" + (titleCase(nameToFind));
         const response = await fetch(API_URL + endpoint);
@@ -219,11 +221,17 @@ const Signedin = (props: Props) => {
         let endpoint = "/games/" + (titleCase(gameToFind));
         const response = await fetch(API_URL + endpoint);
         const data = await response.json();
-
-        games = data;
+        console.log(data);
         
+        games = data;
+
         games = findWinner(games);
         setSpecificGameState(games);
+
+        games.forEach(game => {
+            console.log(game.winner);
+            
+        });
     };
 
 
@@ -238,7 +246,6 @@ const Signedin = (props: Props) => {
 
 
     let sortedGames = sortList([...gameState]);
-
     const allGames = sortedGames.map((game, index)=> {
         return (
  
@@ -247,7 +254,7 @@ const Signedin = (props: Props) => {
             key={index}
             games={game}
             getAllGames={getAllGames}
-            toggleEditGame={toggleEditGame}
+            editGame={editGame}
 
             />
 
@@ -256,11 +263,6 @@ const Signedin = (props: Props) => {
 
     
     let mySortedGames = [...myGameState];
-    console.log(mySortedGames);
-    
-
-    // mySortedGames.length = mySortedGames.length > 10 ? 10 : mySortedGames.length;
-
     const myGames = mySortedGames.map((game, index) => {
         return (
 
@@ -269,14 +271,13 @@ const Signedin = (props: Props) => {
             key={index}
             games={game}
             user={user}
-            toggleEditGame={toggleEditGame}
+            editGame={editGame}
             getAllGames={getAllGames}
             />
         )
     });
 
     let friendSortedGames = sortList([...friendGameState])
-
     const friendGames = friendSortedGames.map((game, index) => {
         return (
 
@@ -289,7 +290,6 @@ const Signedin = (props: Props) => {
     });
 
     let specificSortedGames = sortList([...specificGameState])
-
     const specificGame = specificSortedGames.map((game, index) => {
         return (
 

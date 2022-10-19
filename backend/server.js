@@ -1,6 +1,7 @@
 const express = require('express');
-const nedb = require('nedb-promise');
-//var Datastore = require('nedb');
+// const nedb = require('nedb-promise');
+//const Datastore = require('nedb-promises');
+var Datastore = require('nedb');
 const cors = require('cors');
 const app = express();
 
@@ -9,10 +10,14 @@ app.use(cors({origin: '*'}));
 app.use(express.json());
 
 // en databas för konton
-const accountsDB = new nedb({filename: 'accounts.db', autoload: true});
+//const accountsDB = new nedb({filename: 'accounts.db', autoload: true});
+const accountsDB = new Datastore({filename: './accounts.db'})
 
 // en databas för matcher
-const gamesDB = new nedb({filename: 'games.db', autoload: true});
+//const gamesDB = new nedb({filename: 'games.db', autoload: true});
+const gamesDB = new Datastore({filename:'./games.db'})
+
+//gamesDB.persistence.setAutocompactionInterval(1000);
 
 
 
@@ -122,10 +127,12 @@ app.post('/editgame/:id', async (request, response) => {
     const responseObject = {
         message: {gameInfo}
     }
-
+    console.log(ID)
     gamesDB.remove({ "_id": ID });
 
     gamesDB.insert(gameInfo);
+    console.log(gameInfo);
+    gamesDB.persistence.compactDatafile();
 
     response.json(responseObject);
 })
