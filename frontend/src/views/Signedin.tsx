@@ -6,7 +6,7 @@ import AllGames from '../components/AllGames'
 import MyGames from '../components/MyGames';
 import FriendGames from '../components/FriendGames';
 import SpecificGame from '../components/SpecificGame';
-import { GameInterface } from '../models/interfaces';
+import { GameInterface, PlayerWins } from '../models/interfaces';
 import { API_URL } from '../models/constant'
 
 
@@ -30,11 +30,14 @@ const Signedin = (props: Props) => {
     const [ nameToFind, setNameToFind ] = useState<string>('');
     const [ gameToFind, setGameToFind ] = useState<string>('');
     const [ gameToEdit, setGameToEdit ] = useState<string>('');
+    const [ theWinner, setTheWinner ] = useState<string>('');
+    const [ whatGame, setWhatGame ] = useState<string>('')
     const [ wins, setWins ] = useState<number>(0);
     const [ attendedGames, setAttendedGames ] = useState<number>(0);
 
     let games:GameInterface[];
     let user = localStorage.getItem('user');
+
 
     const navigate = useNavigate();
 
@@ -228,10 +231,19 @@ const Signedin = (props: Props) => {
         games = findWinner(games);
         setSpecificGameState(games);
 
+        let allWinners: {[key: string]:number} = {}
+
         games.forEach(game => {
-            console.log(game.winner);
-            
-        });
+            if (!allWinners[game.winner]) {
+                allWinners[game.winner] = 1
+
+            } else {
+                allWinners[game.winner] += 1
+            }   
+        })
+        setTheWinner(Object.keys(allWinners).reduce((a, b) => allWinners[a] > allWinners[b] ? a : b));
+        setWhatGame(gameToFind);
+        
     };
 
 
@@ -341,6 +353,7 @@ const Signedin = (props: Props) => {
             {showFilterGame ? <section className='games-section search popup'>
                 <input className='input-search' onChange={(e) => setGameToFind(e.target.value)} type="text" name="" id="" placeholder='T.ex tennis, yatzy etc'/>
                 <button className='btn search-btn' onClick={getSpecificGame}>Sök</button>
+                {specificGameState.length > 0 ? <h3>Wow, {theWinner} har vunnit flest matcher i {titleCase(whatGame)}!</h3> : ''}
 
                     {specificGame}
 

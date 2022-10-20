@@ -26,3 +26,8 @@ export interface GameInterface {
     name: string,
     result: string
 }
+
+export interface PlayerWins {
+    name: string,
+    wins: number
+}
