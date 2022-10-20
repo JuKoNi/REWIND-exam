@@ -34,7 +34,7 @@ const MyGames = (props: Props) => {
 
   return (
     <div>
-      {editOneGame}
+      {showEditGame ? editOneGame : ''}
       <header className='game-header'>
                     <h4>Datum</h4>
                     <h4>Typ av match</h4>

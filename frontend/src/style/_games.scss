@@ -109,6 +109,15 @@
     }
 
 }
+input:required {
+    background-color: red;
+}
+input:valid {
+    background-color: pink;
+}
+input:invalid {
+    border-color: red;
+}
 
 
 

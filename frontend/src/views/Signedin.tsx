@@ -67,38 +67,67 @@ const Signedin = (props: Props) => {
     function findWinner(popGames:GameInterface[]) {
         for (let game of popGames) {
 
-        if (game.numberOfPlayers === "1" ) {
-          game.loser = "(ingen)";
-          game.lowScore = 0
-        }
-
-        for (const [name, value] of Object.entries(game)) {
-          if ( game.numberOfPlayers === "2" && game.playerOne.result === game.playerTwo.result ) {
-            game.loser = "(ingen)"
-          }
-    
-          if (name.includes('player') && value.result != '') {
             if (!game.highScore) {
                 game.highScore = 0;
             }
             if (!game.lowScore) {
                 game.lowScore = 10000;
             }
-            
-            if (parseInt(value.result) > game.highScore) {
-              game.highScore = parseInt(value.result);
-              game.winner = (value.name);
-            } else if (parseInt(value.result) == game.highScore) {
-              game.winner = game.winner ? game.winner +' ' +'&'+ ' ' + value.name : value.name;
+
+            // if (game.numberOfPlayers === "1" ) {
+            //     if (parseInt(game.playerOne.result) > 0 ) {
+            //         game.loser = "(ingen)";
+            //         game.winner = game.playerOne.name
+            //     } else {
+            //         game.loser = game.playerOne.name;
+            //         game.winner = "(ingen)"
+            //     }
+            // }
+
+            for (const [name, value] of Object.entries(game)) {
+                // if ( game.numberOfPlayers === "2" && game.playerOne.result === game.playerTwo.result ) {
+                //     game.loser = "(ingen)"
+                // }
+        
+                if (name.includes('player') && value.result != '') {
+   
+                    
+                    if (parseInt(value.result) > game.highScore) {
+                    game.highScore = parseInt(value.result);
+                    game.winner = value.name;
+                    } else if (parseInt(value.result) == game.highScore && game.highScore > 0) {
+                    game.winner = game.winner ? game.winner +' ' +'&'+ ' ' + value.name : value.name;
+                    } 
+                    // else if ( parseInt(value.result) == game.highScore && game.highScore == 0) {
+                    //     game.loser = game.loser ? game.loser +' ' +'&'+ ' ' + value.name : value.name;
+                    //     game.winner = "(ingen)"
+                    // }
+                    if (parseInt(value.result) < game.lowScore) {
+                
+                        
+                        // if(parseInt(value.result) == 0) {
+                        //     game.lowScore = -1
+                        // }
+                        game.lowScore = parseInt(value.result);
+                        console.log(game.lowScore);
+                        
+                        game.loser = value.name;
+                    } else if (parseInt(value.result) == game.lowScore || parseInt(value.result) == 0) {
+                        console.log(game);
+                        
+                    game.loser = game.loser ? game.loser +' ' +'&'+ ' ' + value.name : value.name;
+                    }
+                    if (parseInt(value.result) > 0 && game.lowScore > 0 && game.winner.includes(game.loser)) {
+                        game.loser = ''
+                    }
+              }
+            } 
+            if (!game.winner) {
+                game.winner = '(ingen vinnare)'
             }
-            if (parseInt(value.result) < game.lowScore) {
-              game.lowScore = parseInt(value.result);
-              game.loser = value.name;
-            } else if (parseInt(value.result) == game.lowScore || value.result === 0) {
-              game.loser = game.loser ? game.loser +' ' +'&'+ ' ' + value.name : value.name;
+            if (!game.loser) {   
+                game.loser = '(ingen förlorare)'
             }
-          }
-        }
       }
       return popGames;
     };

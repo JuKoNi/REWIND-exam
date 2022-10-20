@@ -37,6 +37,10 @@ const AddGame = (props: Props) => {
             alert('Vänligen fyll i alla fält.')
             return
         }
+        if (parseInt(resultPlayerOne) < 0 || parseInt(resultPlayerTwo) < 0 || parseInt(resultPlayerThree) < 0 || parseInt(resultPlayerFour) < 0 ) {
+            alert('Minusvärde godtas ej!')
+            return
+        }
         const games:object = {
             typeOfGame: titleCase(typeOfGame),
             date: date,
@@ -69,7 +73,7 @@ const AddGame = (props: Props) => {
 
         <div className='type'>
             <label htmlFor="typeOfGame">Typ av match:</label>
-            <input  onChange={(e) => setTypeOfGame(e.target.value)} type="text" name="typeOfGame" id="typeOfGame" required pattern="[-]?[0-9]*[.,]?[0-9]+"/>
+            <input  onChange={(e) => setTypeOfGame(e.target.value)} type="text" name="typeOfGame" id="typeOfGame" required/>
         </div>
 
         <div className='numberOf'>
@@ -86,7 +90,7 @@ const AddGame = (props: Props) => {
             <div>
 
                 <input onChange={(e) => setPlayerOne(e.target.value)} type="text" name="player" id="" placeholder='Användarnamn' required/>
-                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="result" id="" placeholder='Resultat' required min="0" max="500"/>
+                <input onChange={(e) => setResultPlayerOne(e.target.value)} type="number" name="result" id="" placeholder='Resultat' required min="0" max="500" />
                 
             </div>
 
