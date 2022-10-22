@@ -71,6 +71,17 @@ main {
     align-items: center;
     justify-content: space-evenly;
 
+    input:required {
+        background-color: #a63326
+    }
+    input:valid {
+        background-color: #569c7a;
+    }
+    input:invalid {
+        border-color: #96271b;
+    }
+    
+
     & > div {
         display: flex;
         flex-direction: column;

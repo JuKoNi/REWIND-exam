@@ -127,23 +127,14 @@ app.post('/editgame/:id', async (request, response) => {
     const responseObject = {
         message: {gameInfo}
     }
-    console.log(ID)
+
     gamesDB.remove({ "_id": ID });
 
     gamesDB.insert(gameInfo);
-    console.log(gameInfo);
+
 
     response.json(responseObject);
 })
-
-// TA BORT en match baserat på ID
-// SKITER I DEN HÄR PGA KRÅNGEL O HAR INTE TIIIID
-// app.post('/deletegame/:id', async (request, response) => {
-//     const ID = request.params.id
-
-//     await gamesDB.remove({ "_id": ID });
-//     response.json({success: true})
-// })
 
 
 // starta servern

@@ -6,7 +6,7 @@ import AllGames from '../components/AllGames'
 import MyGames from '../components/MyGames';
 import FriendGames from '../components/FriendGames';
 import SpecificGame from '../components/SpecificGame';
-import { GameInterface, PlayerWins } from '../models/interfaces';
+import { GameInterface } from '../models/interfaces';
 import { API_URL } from '../models/constant'
 
 
@@ -74,50 +74,38 @@ const Signedin = (props: Props) => {
                 game.lowScore = 10000;
             }
 
-            // if (game.numberOfPlayers === "1" ) {
-            //     if (parseInt(game.playerOne.result) > 0 ) {
-            //         game.loser = "(ingen)";
-            //         game.winner = game.playerOne.name
-            //     } else {
-            //         game.loser = game.playerOne.name;
-            //         game.winner = "(ingen)"
-            //     }
-            // }
 
             for (const [name, value] of Object.entries(game)) {
-                // if ( game.numberOfPlayers === "2" && game.playerOne.result === game.playerTwo.result ) {
-                //     game.loser = "(ingen)"
-                // }
-        
+
                 if (name.includes('player') && value.result != '') {
-   
                     
                     if (parseInt(value.result) > game.highScore) {
+
                     game.highScore = parseInt(value.result);
+                    game.loser = game.loser ? game.loser : game.winner ? game.winner : ''
+
                     game.winner = value.name;
+
+                    
                     } else if (parseInt(value.result) == game.highScore && game.highScore > 0) {
                     game.winner = game.winner ? game.winner +' ' +'&'+ ' ' + value.name : value.name;
+
                     } 
-                    // else if ( parseInt(value.result) == game.highScore && game.highScore == 0) {
-                    //     game.loser = game.loser ? game.loser +' ' +'&'+ ' ' + value.name : value.name;
-                    //     game.winner = "(ingen)"
-                    // }
+
                     if (parseInt(value.result) < game.lowScore) {
-                
-                        
-                        // if(parseInt(value.result) == 0) {
-                        //     game.lowScore = -1
-                        // }
+
                         game.lowScore = parseInt(value.result);
-                        console.log(game.lowScore);
                         
                         game.loser = value.name;
+
                     } else if (parseInt(value.result) == game.lowScore || parseInt(value.result) == 0) {
-                        console.log(game);
                         
-                    game.loser = game.loser ? game.loser +' ' +'&'+ ' ' + value.name : value.name;
+                        game.loser = game.loser ? game.loser +' ' +'&'+ ' ' + value.name : value.name;
+
                     }
-                    if (parseInt(value.result) > 0 && game.lowScore > 0 && game.winner.includes(game.loser)) {
+
+                    if (parseInt(value.result) > 0 && game.lowScore > 0 && game.loser != '' && game.winner.includes(game.loser)) {
+
                         game.loser = ''
                     }
               }
@@ -253,8 +241,7 @@ const Signedin = (props: Props) => {
         let endpoint = "/games/" + (titleCase(gameToFind));
         const response = await fetch(API_URL + endpoint);
         const data = await response.json();
-        console.log(data);
-        
+
         games = data;
 
         games = findWinner(games);
@@ -382,7 +369,7 @@ const Signedin = (props: Props) => {
             {showFilterGame ? <section className='games-section search popup'>
                 <input className='input-search' onChange={(e) => setGameToFind(e.target.value)} type="text" name="" id="" placeholder='T.ex tennis, yatzy etc'/>
                 <button className='btn search-btn' onClick={getSpecificGame}>Sök</button>
-                {specificGameState.length > 0 ? <h3>Wow, {theWinner} har vunnit flest matcher i {titleCase(whatGame)}!</h3> : ''}
+                {specificGameState.length > 0 ? <h3>{theWinner} har vunnit flest matcher i {titleCase(whatGame)}!</h3> : ''}
 
                     {specificGame}
 
