@@ -128,7 +128,7 @@ app.post('/editgame/:id', async (request, response) => {
         message: {gameInfo}
     }
 
-    gamesDB.remove({ "_id": ID });
+    await gamesDB.remove({ "_id": ID });
 
     gamesDB.insert(gameInfo);
 
